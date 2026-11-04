@@ -35,10 +35,6 @@ tex/                     40 张贴图
     _N                    明末原版法线（本次新增，之前只有 _D）
     _R / _LPJS_R          明末原版粗糙-反射图（本次新增）
     T_BY_*                自己做的通用图（纯色 / 平法线 / ORM）
-流云织羽-躯干/
-    WuchangLiuyun_Body_fix.fbx    流云织羽（HD）躯干，骨架已改名 Armature、1134 根、顺序=游戏原序
-婉若游龙-身体/
-    WuchangLTZ_Wangxie.fbx        婉若游龙（LTZ）身体 + 龙纹网鞋/光腿/无内裤（保留长裙）
 文档/
     HANDOFF-影之刃零MOD技术总览.md    ← 全量技术与排查记录（建议先读）
     PROGRESS_材质排查.md              ← 早期材质专项排查
@@ -50,6 +46,15 @@ tex/                     40 张贴图
     make_master_mask2.py  建占位母材质（**含 Material Usage 标记，v25 新增**）
     build_dt.py           建 69 行外观表
     reimport_tex.py       强制重导贴图
+```
+
+另外两套衣服在 `未完成工程/` 下各自独立的文件夹里（不放进本目录）：
+
+```
+未完成工程/流云织羽-躯干/WuchangLiuyun_Body_fix.fbx
+    流云织羽（HD）躯干，17 槽，骨架已改名 Armature、1134 根、顺序=游戏原序
+未完成工程/婉若游龙-身体/WuchangLTZ_Wangxie.fbx
+    婉若游龙（LTZ）身体 + 龙纹网鞋/光腿/无内裤（保留长裙），1134 根
 ```
 
 三个 FBX 都已经：
