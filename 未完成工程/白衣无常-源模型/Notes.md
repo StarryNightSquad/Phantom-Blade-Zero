@@ -1,206 +1,196 @@
-# 白衣无常（明末无常）→ 影之刃零 · 移植工程留档
+# 白衣无常 · 源模型（短发版）
 
-最后更新：2026-11-05 05:10
-用途：请人帮忙诊断 / 接手修正用。**不是可直接安装的 mod**，是可以直接导入 UE 的源资产 + 当前构建。
+明末《无常》白衣无常服装 → 影之刃零（Phantom Blade Zero）移植用的**源模型**。
+已过 Blender 处理，可直接导入 UE 5.7。**只差材质着色**（原因见文末）。
+
+最后更新：2026-11-05 12:00
 
 > 想快速了解全貌，先看 `文档/HANDOFF-影之刃零MOD技术总览.md`（15 章，含全部排查记录、外部资料、工具与结论）。
-> 本文只写"这套东西是什么、现在到哪一步、卡在哪"。
 
 ---
 
-## 一、这套东西是什么
+## 文件
 
-把《明末：渊虚之羽》主角无常的服装，做成影之刃零的**独立新增外观**（不替换原版，且不依赖其他服装 mod）。
-
-| 部位 | 来源 | 备注 |
+| 文件 | 大小 | 内容 |
 |---|---|---|
-| 上装 | 明末 白衣无常（内部材质名 `M_HWC_*`） | **肩上骷髅已删**（含舌头，52558 → 46002 面） |
-| 小臂 / 手 | 明末 女眷套 | 裸前臂 + 腕上红绳 + 长指甲，按游戏骨架重绑，缩放 0.9384 |
-| 下装 | 细带高跟 + 光腿 | 无内裤 |
-| 鞋 | 白色细带高跟 | 鞋底 Zmin = −4.360（累计抬高 13mm，**还想再抬 5mm**） |
-| 头 / 发型 | 织绣海寇的头部 | 马尾沿轴缩短到 k=0.34 |
-
-> 关于缩写（我们踩过坑，写清楚）：海寇 = `Base`；**`HWC` = 夜行无常（黑衣）**；**`BWC` = 白衣无常**。
-> `M_HWC_*` 这个材质槽名前缀是明末原版就有的（黑白无常共用同一套网格），不是我们起的。
+| `Baiyi_Body_ShortHair.fbx` | 18.3 MB | 身体，3 mesh / 18 材质槽 / **1134 骨** |
+| `HaiKou_ShortHair_Head.fbx` | 11.7 MB | 头部，取自作者「海寇·明末」包（**原生短发**）/ 10 槽 |
+| `tex/` | 40 张 PNG | 明末原版贴图（`_D` albedo / `_N` 法线 / `_R` 粗糙反射），RGBA |
+| `文档/` | — | 技术总览、材质排查记录、修复方案 |
+| `脚本/` | — | 建材质实例 / 建表 / 重导贴图 |
+| `构建/` | — | 历史可安装包（仅供参考，材质未解决） |
 
 ---
 
-## 二、目录结构
+## 骨架（导入前必看）
 
 ```
-Baiyi_Final.fbx          身体（17 材质槽 / 54927 顶点）        ← 已删骷髅的版本
-Baiyi_Head.fbx           头部（10 材质槽 / 42263 顶点）
-tex/                     40 张贴图
-    _D                    明末原版 albedo
-    _N                    明末原版法线（本次新增，之前只有 _D）
-    _R / _LPJS_R          明末原版粗糙-反射图（本次新增）
-    T_BY_*                自己做的通用图（纯色 / 平法线 / ORM）
-文档/
-    HANDOFF-影之刃零MOD技术总览.md    ← 全量技术与排查记录（建议先读）
-    PROGRESS_材质排查.md              ← 早期材质专项排查
-    修复方案.md                       ← 你给的诊断，我们逐条实测后的对照
-构建/
-    PBZ-白衣无常-金虎槽-v25.zip       ← 当前可安装构建（~mods 三件套）
-脚本/
-    mats_mi.py            建 27 个材质实例（参数表在这里）
-    make_master_mask2.py  建占位母材质（**含 Material Usage 标记，v25 新增**）
-    build_dt.py           建 69 行外观表
-    reimport_tex.py       强制重导贴图
+骨架对象名 = Armature          1134 根
 ```
 
-另外两套衣服在 `未完成工程/` 下各自独立的文件夹里（不放进本目录）：
+三条硬要求，缺一条就出问题：
 
-```
-未完成工程/流云织羽-躯干/WuchangLiuyun_Body_fix.fbx
-    流云织羽（HD）躯干，17 槽，骨架已改名 Armature、1134 根、顺序=游戏原序
-未完成工程/婉若游龙-身体/WuchangLTZ_Wangxie.fbx
-    婉若游龙（LTZ）身体 + 龙纹网鞋/光腿/无内裤（保留长裙），1134 根
-```
+1. **骨架容器对象必须叫 `Armature`**。UE 只跳过这个名字的容器节点；叫别的（如 `HunSkinSkel`）
+   会让 `ReferenceSkeleton` 多生成一根假根骨 → **1135 根** → 切外观时崩
+   `0xC0000005 @ +0x306E8CD`。
+2. **缩放 ×100**。glTF 是米制、UE 是厘米，不放大头只有 1/100 大。
+3. **骨骼顺序必须是游戏原序**：`root, pelvis, spine_01, spine_02, …`
+   Blender 过一趟 glTF 会按 DFS 重排（`ik_weapon_root` 跑到第 1 位、`pelvis` 掉到第 16），
+   蒙皮会把头顶歪 —— 看起来像「脸朝向错误」，本质是权重挂到了错的骨头上。
 
-三个 FBX 都已经：
-- 骨架容器节点改名为 **`Armature`**（UE 只跳过叫这个名字的容器节点，否则会多生成一根假根骨 → 1135 而不是 1134 → 切外观必崩）
-- 单位 ×100（glTF 米制 → UE 厘米）
-- 导出参数：`axis_forward='Y'`, `axis_up='Z'`, `apply_scale_options='FBX_SCALE_ALL'`, `add_leaf_bones=False`
+本文件已满足全部三条。导入后自检：`bones == 1134` 且第 0 根是 `root`。
 
 ---
 
-## 三、导入方式（我们用的）
+## 身体材质槽（3 个 mesh，共 18 槽）
 
-- 骨架：`/HuaShira/Characters/Hero/Hero_Hun/Hun_Skin_Skeleton`（**插件根，不是** `/Game/HuaShira/...`）
-  - 必须用 `unreal.load_asset()` 取骨架；`EditorAssetLibrary.load_asset` 对插件内容返回 None，
-    结果 UE 会自动新建一个 `_Skeleton`，白折腾
-- 导入后校验：`ReferenceSkeleton` 应为 **1134 根、第 0 根是 `root`**
-- 外观：`DT_PBZAppearanceTable` **三行一组**（Outfit 行只写 ItemId，Body 行给 `BodyMeshAsset`，Head 行给 `HeadAsset`）
-- 材质：每槽一个 `MaterialInstanceConstant`，父级
-  `/AkashaEffects/MaterialLibrary/Template/Character/MAI_Equipment_Mask`
-- 打包：`~mods` 三件套（`.pak` 几百字节 + `.utoc` + `.ucas`），文件名带 `_P`
+### `WuCh_BLYR_Pants` — 16,704 顶点 / 6 槽（下装 + 鞋）
 
----
+| 槽 | 名称 | 含义 | Albedo | Normal | Mix |
+|---|---|---|---|---|---|
+| 0 | `MI_zhijia` | 趾甲小片 | — | — | — |
+| 1 | `MI_Body.001` | 腿的皮肤 | `T_Skin_Body_D` | `T_BY_FlatNormal` | `T_BY_ORM` |
+| 2 | `white` | 鞋面 / 白袜 | `T_BY_white` | 同上 | 同上 |
+| 3 | `ih_insoles` | 鞋内底 | `T_BY_insoles` | 同上 | 同上 |
+| 4 | `ih_soles` | 鞋外底 | `T_BY_soles` | 同上 | 同上 |
+| 5 | `ih_metal` | 细带高跟的金属细带 | `T_BY_metal` | 同上 | 同上 |
 
-## 四、材质参数（照 `PBZ_WanRuoYouLong_3800` 的 `MI_YL_Shangsheng` 填）
+### `WUCH_BWC_Jacket` — 31,541 顶点 / 9 槽（上装 + 腰带）
 
-```
-Scalar(19): ReplaceAlpha=0  Normal Strength=1  AO Min=0  AO Exponent=1
-            Roughness Min=0  Roughness Max=1  Roughness Exponent=1
-            Metallic Min=0   Metallic Max=1   Specular=0.5
-            Mask Sharpness=0 Mask Bias=0      Mask Final Multiply=1
-            Tile=1 Tile_U=1 Tile_V=1 Tile ApplyObjectScale=0
-            Use UV2 (For Scene Materials)=0   OpacityThreshold=0.3333
-Vector(5):  AO Channel=0000FF  Roughness Channel=00FF00  Metallic Channel=FF0000
-            Albedo Controls=FFFFFF  Albedo Overlay=BCBCBC
-Texture(3): Albedo / Normal / Mix
-```
+| 槽 | 名称 | 明末原版材质 | Albedo | Normal | Mix |
+|---|---|---|---|---|---|
+| 0 | `M_HWC_Qunzi` | `M_HWC_Qunzi` | `T_BWC_QZ_D` | `T_BWC_QZ_N` | `T_BWC_QZ_R` |
+| 1 | `M_HWC_XiongGu` | `M_HWC_XiongGu` | `T_BWC_XG_D` | `T_BWC_XG_N` | `T_BWC_XG_R` |
+| 2 | `M_HWC_YaoDai01` | `M_HWC_YaoDai01` | `T_BWC_YD_D` | `T_BWC_YD_N` | `T_BWC_YD_R` |
+| 3 | `M_HWC_LianPI01` | `M_HWC_LianPI01` | `T_BWC_LP_D` | `T_BWC_LP_N` | **`T_BWC_LPJS_R`** |
+| 4 | `M_HWC_shoubi` | `M_HWC_shoubi` | `T_BWC_SB_D` | `T_BWC_SB_N` | `T_BWC_SB_R` |
+| 5 | `M_HWC_TouGu` | `M_HWC_TouGu` | `T_BWC_TG_D` | `T_BWC_TG_N` | `T_BWC_TG_R` |
+| 6 | `MI_Head` | — | 头部由 HeadAsset 提供，此槽可忽略 | | |
+| 7 | `MI_Body` | — | `T_Skin_Body_D` | `T_BY_FlatNormal` | `T_BY_ORM` |
+| 8 | `invisible` | — | 隐藏段 | | |
 
-`T_BY_ORM` 按 **MRA** 打包（R=Metallic(0)、G=Roughness(179)、B=AO(255)），与通道向量一致。
-原版各部位的 D/N/R 对应关系（从明末原包读出来的）：
+> `M_HWC_LianPI01` 的反射图是 `T_BWC_LPJS_R`，不是 `T_BWC_LP_R`。
+> 这是明末原版的真实分配，从原包 `wcdump MAT` 逐条读出来的。
 
-| 部位 | Albedo | Normal | Mix |
-|---|---|---|---|
-| 裙 | BWC_QZ_D | BWC_QZ_N | BWC_QZ_R |
-| 胸骨 | BWC_XG_D | BWC_XG_N | BWC_XG_R |
-| 腰带 | BWC_YD_D | BWC_YD_N | BWC_YD_R |
-| 脸皮 | BWC_LP_D | BWC_LP_N | **BWC_LPJS_R** |
-| 手臂 | BWC_SB_D | BWC_SB_N | BWC_SB_R |
-| 头骨 | BWC_TG_D | BWC_TG_N | BWC_TG_R |
+### `WUCH_NvJuan_Hands` — 7,127 顶点 / 3 槽（女眷手：裸前臂 + 红绳 + 长指甲）
 
----
-
-## 五、当前卡住的问题（重点）
-
-### 1. 材质不生效 —— 游戏里是整体均匀灰白（有高光），只有头发有颜色
-
-**已经逐条排除、不用再查的**（都有工具输出为证，详见 `文档/HANDOFF…md` §5/§7）：
-
-- 贴图内容：从成品 pak 解出来的 RGB 与源图逐像素一致；alpha 全 255
-- UV：身体 17 段逐段验过，U/V 都在 0~1，唯一值 86~2536 个
-- 材质挂载：运行时实测 17 槽 / 10 槽全部指向我们的 `MI_BY_*`，类型是 `MaterialInstanceConstant`（不是 DefaultMaterial）
-- MI 参数：从成品里读出来，与 `MI_YL_Shangsheng` 逐项一致（19 标量 / 5 向量 / 3 贴图）
-- 父级路径：游戏里真实存在 `ProjectPBZ/Plugins/AkashaEffects/Content/.../MAI_Equipment_Mask.uasset`，与我们 MI 里的引用逐字相同
-- 外观表不覆盖材质：官方表里 `OverrideMaterials`、`MI_` 字符串都是 -1
-- 虚拟纹理：官方服装贴图 `T_ZeroHun_Cloth_01_ARM` 的 uasset 里**没有** `VirtualTextureStreaming`（不是 VT），
-  而作者的贴图**是** VT。两种都能用，不是关键
-- 占位母材质没被打进包：容器清单 119 条，`Akasha` 命中 0
-
-**v25 刚做的一处改动（重点，请帮忙判断对不对）**
-
-`make_master_mask2.py` 里以前只设了 `blend_mode` 和 `opacity_mask_clip_value`，
-**从来没有设过 Material Usage**，所以占位母材质的 `bUsedWithSkeletalMesh = False`。
-
-我们的理解是：cook 时这个标记会写进每个 MIC 的 `FMaterialCachedExpressionData.RuntimeMaterialUsage`，
-运行时组件判"该材质能否用于骨骼网格"，拿到 false 就退回 `DefaultMaterial`——现象正好对得上
-（不报错、无紫红格子、一片均匀灰白、参数怎么改都不生效）。
-
-已补：
-
-```python
-for _flag in ("used_with_skeletal_mesh", "used_with_static_mesh",
-              "used_with_instanced_static_meshes",
-              "used_with_particle_sprites", "used_with_morph_targets"):
-    mat.set_editor_property(_flag, True)
-```
-
-重建后重新 cook，成品里 MIC 的体积变了，可作为"改动确实落进 cooked 资产"的旁证：
-
-```
-MI_BY_M_HWC_Qunzi.uexp     4687 → 8095 字节  (+3408)
-MI_BY_M_HWC_Qunzi.uheader  2033 → 2310 字节
-```
-
-（此前 v13~v24 这个文件一直是 4687 字节纹丝不动，说明那些版本的改动根本没进到资产里。）
-
-**这一版尚未实机验证。** 如果还是灰，我们下一个怀疑对象是"MIC 是编辑器里从空 MI 新建、父级指向自建占位母材质"
-——也就是你 `修复方案.md` 第 2.4 节说的那条。我们正在按那个方向改用 `retoc to-legacy → UAssetGUI → retoc to-zen`
-直接复制游戏自带的 `MI_ZeroHun_Cloth_01_b` 改名换贴图。
-
-### 2. 头部朝向错 —— 游戏里面朝身体右侧（马尾方向是对的参照）
-
-原因已定位为**骨骼顺序被打乱**（不是位置、不是权重）：
-
-```
-我们的头 SK_GoldenTigerHead    0 root 1 ik_weapon_root 2 ik_weapon_r … 16 pelvis   ❌
-海寇原头 SK_SilkCorsairHead    0 root 1 pelvis 2 spine_01 …                        ✅
-我们的身体 SK_GoldenTigerBody  0 root 1 pelvis 2 spine_01 …                        ✅
-```
-
-骨骼总数都是 1134。头部走的是 glb 自带骨架（Blender/glTF 按 DFS 重排），
-身体走的是 `Hun_Skin_Skeleton.fbx` 的原始顺序。
-另外用 Kabsch 配准验过：**绑定姿势下几何与海寇原头逐顶点一致（rms < 0.1）**，
-蒙皮权重的支配骨分布也完全相同——所以**几何没问题，纯粹是骨骼索引错位**。
-
-### 3. 前臂错乱
-
-女眷手是按"肘→腕相似变换"搬的权重（缩放 0.9384），可能少了一节。
-
-### 4. 鞋底还想再抬约 5mm
-
-（目前是改网格顶点；你建议过"不要动网格"，我们想听听更好的做法。）
+| 槽 | 名称 | Albedo |
+|---|---|---|
+| 0 | `M_WCNJ_Jacket` | `T_NVJ_COAT_D` |
+| 1 | `MI_ZhiJia_base` | 指甲 |
+| 2 | `MI_Body.002` | 手部皮肤 → `T_Skin_Body_D` |
 
 ---
 
-## 六、想请教的三件事
+## 头部材质槽（`HaiKou_ShortHair_Head.fbx`）
 
-1. **我们这套 MI 为什么在游戏里不上色？**
-   除了"父级是自建占位母材质"，还有别的差异吗？
-   你们的 MI 名称表里带着 `MI_ZeroHun_Cloth_01_b` 和 `T_ZeroHun_Cloth_01_ARM/_BC/_N`，
-   看起来是**拿游戏自带 MI 复制改名再换贴图**。是不是必须这么做，编辑器里新建的 MI 一定不行？
-   （也想确认：是不是只要 MI 的 `FMaterialCachedExpressionData` 来自非真母材质，就必然绑不上参数。）
+取自作者 `PBZ_Corsair_3304` 包的 `SK_CorsairHead`，**原生短发**，游戏骨架导出
+（所以不存在 DFS 重排问题）。原版 13 槽去重后 10 槽：
 
-2. **头部怎么做才能保证导入后骨骼顺序和游戏骨架一致？**
-   我们目前是"网格来自 glb、骨架来自 `Hun_Skin_Skeleton.fbx`、按骨名搬权重"，
-   Blender 侧只要经过 glb 往返就会把骨骼按 DFS 重排。有没有更稳的做法
-   （比如直接 PSK 链路，或者导入 UE 后用 Skeleton 重建）？
+| 槽 | 名称 | 含义 |
+|---|---|---|
+| 0 | `MI_FO_bfa4d791a5f2` | 头发（占原版 5 个槽） |
+| 1 | `MI_FO_934b31c540d2` | 发饰 |
+| 2 | `MI_Wuchang_Brows_67630add` | 眉毛 |
+| 3 | `MI_Wuchang_Eye_7f573563` | 眼球 |
+| 4 | `MI_Wuchang_Eyelash_5157e96a` | 睫毛 |
+| 5 | `MI_Wuchang_Head_eedd7a66` | 脸部皮肤 |
+| 6 | `MI_Wuchang_Tear_7427bc8b` | 泪痕 |
+| 7 | `MI_teeth_low_2e7ba38b` | 下牙 |
+| 8 | `MI_teeth_up_9d491ce7` | 上牙 |
+| 9 | `MI_tongue_8777624a` | 舌头 |
 
-3. **同一个外观表被多个包提供时，你们的合并规则是什么？**
-   我们在 `~mods` 里同时放了你们的 9 个辅助包（`PBZCollectionWardrobe` 系列）和我们自己的表，
-   怀疑互相覆盖。说明里写"本批次共用相同外观表 + 通过各包自己的标记只显示已安装的新外观"，
-   这个"标记"是指 `Content/Mods/PBZCollectionWardrobe/DT_CollectionGrants` 吗？
+原版 13 槽完整顺序（要精确复刻时用）：
+
+```
+[0][1][2][4] MI_FO_bfa4d791a5f2   [3] MI_FO_934b31c540d2
+[5] Brows  [6] Eye  [7] Eyelash  [8] Head  [9] Tear
+[10] teeth_low  [11] teeth_up  [12] tongue
+```
 
 ---
 
-## 七、其他备注
+## 外观表（`DT_PBZAppearanceTable`）
 
-- 运行环境：Steam 版，UE **5.7.4**
-- 我们自己写的两个读取工具（CUE4Parse）：PBZ 侧 `izprobe`、明末侧 `wcdump`，
-  能读游戏本体全部资产（AES key 见 `文档/HANDOFF…md` §2.2）。需要哪个资产的具体数值，我们可以直接给。
-- 已确认：`~mods` 里**任何含 JavaScript 的 .pak** 都会让 UI 文字变成 `{ButtonText}`（游戏 11-04 更新后）。
-  所以我们的包一个 JS 都不带。
+每套服装 **3 行**，靠 ItemId 互相引用：
+
+```
+Hun_OutFit_CodexXXX          AppearanceType = Outfit      ← 只声明 ItemId
+CodexXXX_Body                AppearanceType = Body        BodyMeshAsset = <身体网格>
+CodexXXX_Head                AppearanceType = Hairstyle   HeadAsset     = <头部网格>
+```
+
+`EAppearanceType`：0 Body / 1 Hat / 2 Beard / 3 Hairstyle / 4 Outfit / 5 Neck / 6 MeshBand / 7 BrowLashCard
+
+官方预留 5 个 Codex 槽位，资产路径写死 `/Game/Mods/PBZWardrobe/`：
+
+```
+CodexFY / CodexFoxRain / CodexSilkCorsair / CodexGoldenTiger / CodexMuXiaoKui
+```
+
+---
+
+## 已解决的问题（别再重走）
+
+| 问题 | 原因 | 修法 |
+|---|---|---|
+| 切外观必崩 `0xC0000005` | 骨架容器名不是 `Armature` → 1135 根假根骨 | 改名 |
+| 第二个崩溃原因 | 自建 base Material 的 uniform buffer 求值失败 | 改用 MaterialInstance 指向游戏母材质 |
+| 摆大字 + 没动作 + 没头 | 骨架挂载路径写成 `/Game/HuaShira/…` | 应为 `/HuaShira/…`（插件根） |
+| 头只有 1/100 大 | glTF 米制未 ×100 | 整体缩放 ×100 |
+| 衣柜里看不到新服装 | 缺外观表 | 自建 69 行 `DT_PBZAppearanceTable` |
+| 界面文字变 `{ButtonText}` | `~mods` 里任何含 JS 的 pak 都会触发 | 彻底不发 JS |
+| 手/前臂在动作里塌陷 | 完全没有 twist 骨权重（作者占 14049 顶点，我们 0） | 按肘→腕参数 t 拆分权重，**每顶点限 4 骨** |
+| 启动崩 `Missing global shader` | UAT 把 `Config/DefaultEngine.ini`、`MainStart.js` 等 698 个文件塞进了 `.pak`，顶掉游戏本体 | `.pak` 只留 456 字节占位，资产全走 `.utoc/.ucas` |
+
+---
+
+## 已知问题 / 卡在哪
+
+**唯一未解决：材质实例不着色。** 游戏里表现为均匀金属灰。
+
+已排除（都验证过，不用重走）：贴图内容、alpha、UV、槽位挂载、参数名、表指向。
+
+**根因（有实测数据）：我们的 MI 是空壳**
+
+```
+作者可用的 MI   uexp 682 字节
+我们 cook 的    uexp 214 字节   ← 没有材质参数，也没有着色器缓存
+```
+
+父级指向我们自己造的「同路径但节点是空的」占位母材质。两条可行路径：
+
+1. **在编辑器里复刻母材质** `MAI_Equipment_Mask` 的节点连线：
+   `TextureSample(Albedo) → BaseColor`、`Mix 的 R/G/B → Metallic/Roughness/AO`、
+   `Normal → Normal`、`Albedo.a → OpacityMask`
+2. **复制游戏原版 MI 改名换贴图**（社区标准做法，需 UAssetGUI 手工操作）
+
+---
+
+## 其他已知但未处理
+
+- 手比作者的小约 7%（女眷手为使前臂长度对上骨架做了 `0.9384` 缩放）
+- 鞋底已累计抬高 13 mm，若仍偏低需再调
+- 手臂已补 `upperarm_twist_01/02`、`lowerarm_twist_01/02` 权重
+
+---
+
+## 工具链的硬边界（实测，别白试）
+
+- **UE 的 UnrealPak 读不了 retoc 产出的 uasset**：把 legacy MI 塞进 Cooked 再 UAT 打包 →
+  `LogUnrealNames: Error: String is too long` + `Assertion failed: Header.Len != 0` (UnrealNames.cpp:2422)
+- **retoc 读不了 UE cook 产物**：`Extracted 0 (78 failed)`，报缺 `ScriptObjects` chunk，
+  加 `--no-script-objects` 也一样
+- → **两条链路不能混，必须各自独立打包**
+
+## 另一个坑：UAT 打 iostore 会往 `.pak` 里塞垃圾
+
+```
+ProjectPBZ/Config/DefaultEngine.ini       ← 顶掉游戏渲染设置 → skin cache 重置 → 全局 shader 缺失
+ProjectPBZ/Content/JavaScript/MainStart.js ← 顶掉游戏主脚本 → UI 文字异常
+ProjectPBZ/AssetRegistry.bin
+Engine/Content/...（icu 语言包）
+698 个文件 / 2.93 MB
+```
+
+**必须**用 456 字节的占位 `.pak` 替换（iostore 容器需要同名 `.pak` 才会挂载，但内容不能有东西）。
