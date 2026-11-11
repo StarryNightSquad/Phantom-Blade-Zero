@@ -1,0 +1,112 @@
+{
+  "generated": "2026-11-10 20:35（最后更新 23:05）",
+  "root": "E:/steam/steamapps/common/PBZ/workbuddy/tools",
+  "scope": "P0.1 前置工具链：下载 + 校验 + 冒烟 + 明末 usmap 自生成；曾临时部署 UE4SS 到明末，现已完整 --undo 复原；未解包资产内容、未打包、主线未开工",
+  "tools": [
+    {
+      "name": ".NET SDK 8.0.412 (解压版)",
+      "path": "dotnet-sdk/dotnet.exe",
+      "verified": "dotnet --version -> 8.0.412",
+      "role": "备用（UAssetGUI / 旧版 net8 CUE4Parse）"
+    },
+    {
+      "name": ".NET SDK 10.0.100 (解压版)",
+      "path": "dotnet-sdk10/dotnet.exe",
+      "verified": "dotnet --version -> 10.0.100",
+      "role": "主用：CUE4Parse 202611 只发布 net10.0"
+    },
+    {
+      "name": "CUE4Parse 1.2.2.202611 (NuGet)",
+      "path": "pbzprobe/bin/Release/net10.0/CUE4Parse.dll",
+      "verified": "build 0 error / TOOLCHAIN_OK / Has GAME_UE5_7=True / GAME_UE5_8=True",
+      "role": "读 PBZ(UE5.7) IoStore 与明末(UE5.1) pak，导出网格/贴图/DataTable"
+    },
+    {
+      "name": "retoc_cli 0.1.5 (Windows x64)",
+      "path": "third_party/retoc/retoc.exe",
+      "sha256": "cc036b06ad3bdcf7003690b00d82719980c374e48a95bf0654f9959148d263aa",
+      "verified": "sha256 MATCH；retoc --version -> retoc_cli 0.1.5；23:20 实测 --version 枚举明确含 UE5_7；info/list/unpack 读 PBZ 槽位容器成功",
+      "role": "IoStore(Zen) <-> Legacy 转换、打 iostore 容器。两个实测要点：① to-legacy 对单个 mod 容器会因缺 ScriptObjects 失败，必须把游戏本体 global.utoc/.ucas 放进同一输入目录；② to-zen 可直接吃 legacy 目录，无需先打 legacy pak，自动产出标准三件套"
+    },
+    {
+      "name": "UAssetGUI 1.1.0",
+      "path": "third_party/UAssetGUI.exe",
+      "sha256": "b7d75c0893f1a60e565853ae638bc21f2416cd12c2d9d854e297abb87ceb3263",
+      "verified": "sha256 MATCH",
+      "role": "改 MI 参数；支持 UE5.6/5.7、.usmap v4；内置 retoc 集成，可直接开 .utoc/.ucas"
+    },
+    {
+      "name": "pbzprobe (CUE4Parse CLI)",
+      "path": "pbzprobe/pbzprobe.csproj",
+      "verified": "net10.0 Release build 成功；无参冒烟通过；wcls 挂载明末 Paks 得到 207689 文件；wextract 导出 24 个资产 0 失败；umap 加载明末 usmap 返回 USMAP_LOAD_OK",
+      "role": "wcls / wextract / umap <usmap> / bpa <paksDir> <key> <usmap> <filter>（递归展开 AnimBP Spring/Trail 参数）/ pcls <paksDir> <key> <usmap> <filter> [outDir]（挂加密 PBZ 本体 UE5_7，实测 310552 文件，可导出）/ slot <mountDir> <usmap> <filter>。反射适配 CUE4Parse 202611 的 StructProperty→FScriptStruct→StructType→FStructFallback 包装链"
+    },
+    {
+      "name": "zDEV-UE4SS_v3.0.1 (官方开发包，用于生成明末 .usmap)",
+      "path": "third_party/UE4SS/extracted/",
+      "zip": "third_party/UE4SS/zDEV-UE4SS_v3.0.1.zip",
+      "sha256": "af777d2af33fce4d520de35a8665e417376bcc530fec647778012ce6cdf51b2b",
+      "verified": "23810106 B 下载完整并解压；UE4SS.dll 含 Generate .usmap / DumpUSMAP / UnrealMappingsDumper；官方 Keybinds main.lua 确认 Ctrl+Numpad6 绑定 DumpUSMAP()",
+      "role": "部署到明末 Binaries/Win64（官方 flat 布局）后启动一次游戏，GUI Dumpers > Generate .usmap 或 Ctrl+Numpad6"
+    },
+    {
+      "name": "deploy_ue4ss_wuchang.py",
+      "path": "deploy_ue4ss_wuchang.py",
+      "verified": "py_compile OK；official / pbz 两种来源 dry-run 均通过；21:54 --apply 已执行（109 文件、backed_up=0、xinput1_3.dll 未动）；22:19 首次实机启动实测后改默认 GUI off，两种 ini 配置的 patch_ini 单元校验与重复部署保护均通过",
+      "role": "默认官方包 flat 布局 + GUI 控制台 OFF（本机 OpenGL GUI 实测白屏）；--gui 启用 GUI 并按官方 Changelog issue #1 设 dx11；--source pbz 为 DLL 备用；--apply 部署（先备份），--undo 还原并自动另存 *.usmap/UE4SS.log 到 github_wip/usmap/。仅改引擎版本 5/1 与 GUI 开关，GraphicsAPI/bUseUObjectArrayCache 保持官方默认",
+      "deploy_state": "UNDONE 2026-11-10 23:0x：--undo 已完整执行（中断后重跑一次），109 个部署文件 + 空目录 + 运行产物全部清除，manifest 已移除；游戏原有文件（xinput1_3.dll / version.dll / winmm.dll / dsound.dll / Juij_Steam.dll / 主 exe）全部完好。UE4SS 已彻底禁用，如需再生成 usmap 须重新 --apply",
+      "first_launch_log": "github_wip/usmap/20261110_first_launch_UE4SS.log"
+    },
+    {
+      "name": "明末 Project_Plague-UE5.1.1.usmap (自行生成)",
+      "path": "github_wip/usmap/Project_Plague-UE5.1.1.usmap",
+      "sha256": "809260c4f4fb4d1eb5cce2dee7e60dc0167f9da8e9285a2cd6231ddd65550e26",
+      "size": 1429558,
+      "verified": "UE4SS 日志 'Mappings Generation Completed Successfully!'；magic 0x30C4 / version 0（UE4SS 3.0.1 生成的旧格式，PBZ 那份是 v4）；CUE4Parse FileUsmapTypeMappingsProvider 加载 USMAP_LOAD_OK；明文 name map 含 SpringStiffness(2) / SpringDamping(1) / TrailBone(1) / /Script/AnimGraphRuntime(1)，29394 个可打印串",
+      "role": "增强线解析明末 BPA_* 的 SpringStiffness / SpringDamping 数值、DT_Item_EquipmentTable；原始备份同目录 20261110_215408/Mappings.usmap（hash 一致）",
+      "note": "version 0 ≠ PBZ 的 version 4，但 CUE4Parse 202611 已实测可读，无需转换"
+    },
+    {
+      "name": "UAssetAPI 1.1.0 + mipatch CLI",
+      "path": "third_party/UAssetAPI/ (dll+xml) + mipatch/mipatch.csproj (net8.0)",
+      "verified": "读 legacy MI 属性表成功；把 Albedo Controls 从 (1,1,1,0) 改成 (1,0,0,0)，Write() 同时产出 .uasset/.uexp，二进制仅 4 字节变化",
+      "role": "程序化改写 cooked 资产参数，替代 UAssetGUI GUI。read <uasset> [usmap] / patch <in.uasset> <out.uasset> [usmap]；目标参数用 MIPATCH_PARAM 指定（默认 Albedo Controls）",
+      "critical": "EngineVersion 必须用 VER_UE5_6（MIPATCH_ENGINE 环境变量）。VER_UE5_4/5_5/5_7/5_8 读该 cooked 5.7 资产会 Out of memory。需要 PBZ v4 usmap 才能解析 unversioned properties"
+    },
+    {
+      "name": "P1 纯红测试三件套（已产出，未安装）",
+      "path": "github_wip/p1_final/zzzzzzzzz_PBZ_SmokeRed_P.{pak,utoc,ucas}",
+      "verified": "347 / 504 / 3903 B；retoc info + UnrealPak -List + retoc unpack round-trip 全部通过；Zen 包内 FLinearColor(1,0,0,0) 1 次、原白色 0 次",
+      "role": "P1 最小链路验证产物。只含 1 个改过的 MI，其余依赖由仍在 ~mods 的 SilkCorsair_2301 提供。安装到 ~mods 并进游戏需用户确认"
+    },
+    {
+      "name": "明末布料/物理资产原始数据",
+      "path": "github_wip/wuchang_cloth_physics/ (24 个 .uasset/.uexp)",
+      "verified": "12 个资产（24 文件）导出 0 失败；23:25 用明末 usmap 批量解析出 1258 个参数点 / 3867 行",
+      "role": "BPA_* 是 Animation Blueprint（SpringBone / TrailBone），非 ChaosCloth。数值已解析：SpringStiffness 200/400/450/500/800、SpringDamping 0/5.5/6/8、ChainBoneAxis=EAxis::X；产物 bpa_params_full.txt + bpa_params_summary.json"
+    }
+  ],
+  "ue57_engine": {
+    "path": "D:/Epic Games/UE_5.7",
+    "verified": "2026-11-10 23:45 完整核查：Build.version 5.7.4 / CL-51494982 / ++UE5+Release-5.7；ToolComplete.txt 存在；UnrealEditor.modules 517 模块 BuildId 47537391 与版本一致；217608 文件；cook 必需组件齐全",
+    "smoke_test": "手写最小纯内容工程 workbuddy/p3_smoke/ProjectPBZ/ProjectPBZ.uproject，UnrealEditor-Cmd -unattended -NullRHI 成功加载，日志 p3_smoke/editor_smoke.log（Engine Version 5.7.4-51494982 / Running engine for game: ProjectPBZ / Android+IOS TargetPlatform 加载），exit=0，进程已清理",
+    "caveats": "Templates/ 未安装（可选模板组件，手写 .uproject 不受影响）；Launcher 版不含部分程序源码；可选性能分析 DLL 加载失败无害",
+    "conclusion": "P3 重建工程与 cook 无环境障碍"
+  },
+  "key_finding": "CUE4Parse 1.2.2 (net8) 的 EGame 枚举最高到 GAME_UE5_6，不含 5.7；202607 之后的日期版才有 GAME_UE5_7 / 5_8，且只发 net10.0。游戏是 UE5.7.4 → 必须用 .NET 10 SDK + CUE4Parse 202611。",
+  "still_missing": [],
+  "resolved": [
+    "明末 usmap：2026-11-10 22:19 由 UE4SS 自行生成，23:0x 校验通过并归档；UE4SS 已完全卸载，游戏目录复原。"
+  ],
+  "housekeeping": [
+    "_downloads/ 内为两个 SDK 原始 zip（约 570MB），已解压验证，可自行删除",
+    ".nuget/ 为本地 NuGet 包缓存，避免写入用户目录"
+  ],
+  "usage": {
+    "build": "DOTNET_ROOT=<tools>/dotnet-sdk10 NUGET_PACKAGES=<tools>/.nuget <tools>/dotnet-sdk10/dotnet.exe build -c Release",
+    "retoc_list": "<tools>/third_party/retoc/retoc.exe list <file.utoc>",
+    "retoc_to_legacy": "<tools>/third_party/retoc/retoc.exe to-legacy --input <Paks> --output <dir>",
+    "uassetgui": "<tools>/third_party/UAssetGUI.exe",
+    "unrealpak": "D:/Epic Games/UE_5.7/Engine/Binaries/Win64/UnrealPak.exe"
+  }
+}

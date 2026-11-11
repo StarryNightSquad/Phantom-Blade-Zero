@@ -1,0 +1,108 @@
+{
+  "generated": "2026-11-11 00:15",
+  "updated": "2026-11-11 00:30 (安装路径核查)",
+  "user_choice": "方案 2：自动化链（不依赖 UAssetGUI GUI）",
+  "status": "CHAIN_VALIDATED but P1_DESIGN_SCRAPPED (未安装、未进游戏；产物不用于主线)",
+  "p1_design_note_2026_11_11_0031": "用户确认 23 套合集是他主动移除的（原定不考虑兼容其它服装 mod），且明确「不建议以此为基础，服装太多不知道改的是哪套」。→ 不恢复 23 套；本文件记录的纯红 MI 测试包【作废、不安装】，因为它借用 SilkCorsair_2301 的资产、观察对象混在 23 套里不唯一。自动化链 retoc→mipatch→to-zen 本身仍有效，只是必须换用【游戏本体】资产重做，且进游戏后观察对象要唯一可辨识。见方案 v15 / 第 19 条决策。",
+  "correction": "上一轮说「CUE4Parse 配合写回」不准确：CUE4Parse 是只读库。实际用 UAssetAPI（UAssetGUI 底层 .NET 8 库）做程序化改写。",
+
+  "install_path": {
+    "verdict": "唯一正确位置 = E:/steam/steamapps/common/PBZ/ProjectPBZ/Content/Paks/~mods/ ，三个文件【平铺】放在该目录根部，不建子目录。",
+    "files": [
+      "zzzzzzzzz_PBZ_SmokeRed_P.pak",
+      "zzzzzzzzz_PBZ_SmokeRed_P.utoc",
+      "zzzzzzzzz_PBZ_SmokeRed_P.ucas"
+    ],
+    "evidence": [
+      "【UEModManager 自身日志 app-20261110.log:504 / 1070 / 1361】原文 `mods folder 'e:\\steam\\steamapps\\common\\PBZ\\ProjectPBZ\\Content\\Paks\\~mods'`。管理器自己认定的 mods 目录。",
+      "【mods.json 实测】13 个 mod 共 289 个文件的 target='Mods'，其 deployedPath 全部指向 `...\\ProjectPBZ\\Content\\Paks\\~mods\\<文件名>`；其它 target 分布 InstallRoot=10 / LogicMods=6 / Ue4ssMods=4，分别给 version.dll、逻辑 mod、UE4SS Lua，不是资源包该去的地方。",
+      "【启用/禁用机制实证】library/<hash>/ 与 ~mods 同名三件套 sha256 完全一致（复制而非链接）；app-20261111.log 00:22:50 `Disabled \"23 display garments\"` 后 ~mods 从 270 文件(90 组)骤降到 6 文件(2 组) → 启用=复制到 ~mods，禁用=从 ~mods 删除。游戏只读 ~mods 里的实体文件。",
+      "【作者 README 原文】19 套 `将本包中的 ProjectPBZ 文件夹合并到 PBZ 游戏根目录`；23 套 `将 ProjectPBZ 合并到 PBZ 游戏根目录`。即 ProjectPBZ/Content/Paks/~mods/ 之下。",
+      "【本机实际生效布局】~mods 里 0 个子目录、90 组三件套全部平铺，且用户实测能正常进游戏。23 套 zip 内部的 `~mods/<每套文件夹>` + `~mods/PBZOutfitCommon` 是手动合并布局；UEModManager 导入时会自动平铺，跟本机生效状态保持一致最稳妥。",
+      "【容器级字节核对】我们包 mount_point=../../../、flags=Indexed、version=ReplaceIoChunkHashWithIoHash、header=SoftPackageReferencesOffset、compression=[] 与参照包一致；目标 MI 路径 `../../../ProjectPBZ/Content/Mods/PBZWardrobe/MaterialInstances/MI_Wuchang_Head_eedd7a66.uasset` 与 SilkCorsair_2301 包内路径逐字符一致。",
+      "【排序】~mods 现有包最长前缀为 8 个 z（zzzzzzzz_PBZ_*）；我们用 9 个 z，C 字典序第 9 字符 'z'(122) > '_'(95) → 排最后后加载覆盖，与作者靠 z 前缀保证优先级的做法一致。三件套都带 _P 后缀。"
+    ],
+    "do_not_put_in": [
+      "Data/games/phantom-blade-zero/library/<hash>/ —— 只是 UEModManager 的仓库副本，游戏不读（禁用时文件仍在但游戏没加载）",
+      "PBZ/ 游戏根目录 / platform/steam/ —— version.dll、UE4SS、steam_api 的位置",
+      "ProjectPBZ/Content/Paks/ 根目录 —— 本体 ProjectPBZ-Windows.* 与 global.* 容器所在，无 _P 优先级保证且可能顶掉本体",
+      "ProjectPBZ/Content/Paks/LogicMods/ —— 空目录，对应 target=LogicMods 的逻辑 mod",
+      "ProjectPBZ/PBZModLoader/mods/ —— JS/TS 逻辑 mod（PBZModLoader 安装说明明确），不是 pak",
+      "platform/steam/ue4ss/Mods/ —— UE4SS Lua mod",
+      "~mods/<新建子目录>/ —— 本机能跑的 90 个包全是平铺；不引入未经实测的子目录布局"
+    ],
+    "manager_caveat": "UEModManager 当前在运行(pid 23724)。手动放的文件不在 mods.json 里：管理器界面不会显示/不能一键禁用，但也不会主动删（它只按自己记录的 deployedPath 删除；日志里有 `These files were changed outside the manager, so nothing was removed`）。稳妥做法：退出管理器后再放；或做成符合管理器格式的 zip 用『安装』导入。",
+    "game_running": false
+  },
+
+  "environment_change_2026_11_11_002250": {
+    "event": "UEModManager 日志 `Disabled \"23 display garments\"`，把 88 组三件套从 ~mods 移除",
+    "user_confirmed": "00:31 用户确认这是他【主动移除】，刻意为『原定计划不考虑兼容其它服装 mod』让路。→ 不恢复。且明确『不建议以此为基础，它服装太多我都不知道你改的是哪套服装』→ P1 不得基于作者合集。",
+    "mods_json": "id 88a619138484 enabled=false, files=264, deployed=0",
+    "~mods_now": [
+      "zChiLianNude_999_P.{pak,utoc,ucas} (白赤链裸体1.2, enabled=true)",
+      "zzz_PBZ_WuchangVoice_999_P.{pak,utoc,ucas} (Wuchang Volice 2, enabled=true)"
+    ],
+    "library_intact": "Data/games/phantom-blade-zero/library/88a619138484/ 仍有 264 个文件，随时可重新启用",
+    "impact_on_p1": "【不再是『需恢复依赖』，而是整个 P1 设计作废】用户明确不要用 23 套做基础。SilkCorsair_2301 不在加载目录只是表象；根本问题是观察对象混在 23 套里不唯一、且依赖其它服装 mod。→ P1 必须改用游戏本体资产重做，或干脆越过颜色测试直接做独立新增槽位的最小 mod。"
+  },
+
+  "pipeline": [
+    {
+      "step": "1. retoc to-legacy",
+      "cmd": "retoc -a <PBZ_AES_KEY> to-legacy --version UE5_7 --filter MI_Wuchang_Head_eedd7a66 --no-shaders <mountDir> <outDir>",
+      "key_finding": "单个 mod 容器会因缺 ScriptObjects chunk 失败（'FIoChunkId ... chunk_type: ScriptObjects not found'）。必须把游戏本体的 global.utoc(410B) + global.ucas(4.4MB) 与目标 mod 容器三件套放进同一临时目录。之后成功：Extracted 1 (0 failed)，产出 .uasset 3390 B + .uexp 548 B + scriptobjects.bin 4.5MB。",
+      "input": "github_wip/p1_mount/ (global.* + zzzzzz_PBZ_SilkCorsair_2301_P.{pak,utoc,ucas})",
+      "output": "github_wip/p1_legacy/ProjectPBZ/Content/Mods/PBZWardrobe/MaterialInstances/MI_Wuchang_Head_eedd7a66.{uasset,uexp}"
+    },
+    {
+      "step": "2. mipatch (UAssetAPI 1.1.0)",
+      "tool": "workbuddy/tools/mipatch/ (net8.0, PackageReference UAssetAPI 1.1.0)",
+      "key_finding": "UAssetAPI 用 VER_UE5_4/5_5/5_7/5_8 读取该 cooked 5.7 资产会 Out of memory；只有 VER_UE5_6 能正常解析。运行时通过 MIPATCH_ENGINE 环境变量指定。",
+      "needs_usmap": "PBZ 4.78MB v4 usmap（platform/steam/ue4ss/ProjectPBZ-5.7.4-...usmap）",
+      "mi_structure": [
+        "Parent (ObjectProperty = -5)",
+        "ScalarParameterValues (Normal Strength / Roughness Min|Max / Metallic / AO / Specular / SkinMicroNormalIntensity / CavityMapPower / Thickness ...)",
+        "VectorParameterValues (Roughness Channel=(0,1,0,0), Albedo Controls=(1,1,1,0), Albedo Overlay=(0.5,0.5,0.5,0))",
+        "TextureParameterValues (Albedo=-7, Normal=-9, Mix=-11, SCMT_Map=-13)",
+        "TextureStreamingData"
+      ],
+      "patch": "把 VectorParameterValues['Albedo Controls'] 的 FLinearColor 从 (1,1,1,0) 改成纯红 (1,0,0,0)",
+      "why_this_param": "只改数值、不新增贴图引用 → 完全避开 11-05 HANDOFF 那次「红贴图没被 cook 收录、根本没进包」的失败模式",
+      "binary_diff": ".uasset 0 字节变化；.uexp 仅 4 字节（off 386/387、390/391 从 0x3F80=1.0 改为 0x0000=0.0，即 G/B 归零，R 保持 1.0）",
+      "param_dump": "github_wip/p1_legacy/MI_params_dump.txt"
+    },
+    {
+      "step": "3. retoc to-zen",
+      "cmd": "retoc to-zen --version UE5_7 <patchedDir> <out.utoc>",
+      "key_finding": "直接吃目录即可，不需要先用 UnrealPak 打 legacy pak。自动产出标准三件套。",
+      "output": "github_wip/p1_final/zzzzzzzzz_PBZ_SmokeRed_P.{pak,utoc,ucas}",
+      "sizes": {"pak": 347, "utoc": 504, "ucas": 3903},
+      "naming": "9 个 z 前缀，排在现有 8 个 z 的包之后，保证最后加载"
+    },
+    {
+      "step": "4. round-trip 验证",
+      "checks": {
+        "retoc info": "version ReplaceIoChunkHashWithIoHash / mount_point ../../../ / chunks 2 / packages 1 / compression_methods [] / container_header_version SoftPackageReferencesOffset —— 与参照 Slot_CorsairAppearance_9960 结构一致",
+        "UnrealPak -List": "路径 ../../../ProjectPBZ/Content/Mods/PBZWardrobe/MaterialInstances/MI_Wuchang_Head_eedd7a66.uasset，2 files / 3903 B",
+        "retoc unpack": "提取出 3775 B Zen package",
+        "bytes": "Zen 包内 pure-red FLinearColor(1,0,0,0) 出现 1 次，原白色(1,1,1,0) 0 次 → 红色参数确实进了容器"
+      }
+    }
+  ],
+  "deliverable": {
+    "path": "github_wip/p1_final/zzzzzzzzz_PBZ_SmokeRed_P.{pak,utoc,ucas}",
+    "content": "只含 1 个改过的 MI。但【该产物已作废、不安装】：它的资产路径 ProjectPBZ/Content/Mods/PBZWardrobe/MaterialInstances/... 属于作者 mod 命名空间，依赖 SilkCorsair_2301 提供母材质/贴图/网格/DT 表，而该包已被用户主动移除。保留它只作为『自动化链可跑通』的技术证据。",
+    "installed": false,
+    "game_tested": false,
+    "disposition": "SCRAPPED — 不入主线，不写入 ~mods"
+  },
+  "body_asset_index": "workbuddy/github_wip/pbz_game_index.txt（310,552 条本体路径，`pbzprobe pcls <paks> <key> <usmap> \"!index\" <out>` 生成）。主角网格 ProjectPBZ/Plugins/HuaShira/Content/Characters/Hero/Hero_Hun/SkinParts/，主角材质实例 ProjectPBZ/Content/PBZContent/Characters/Hero/Hun_*/Material/（如 Hun_New_V1/Material/V02/MI_Hero_Hun_P1_Cloth_01）。",
+  "next_step_needs_user": "在三个方向中选定 P1 形态：A=覆盖【游戏本体】主角基础材质为纯红（零外部 mod 依赖、单变量、主角出场即可见）；B=直接做【独立新增槽位】的最小 mod（衣柜里出现我们自命名条目，一次到位但多变量）；C=跳过颜色测试，把首次进游戏验证合并到第一个成品。选定后才动手；本轮未打包、未安装、未改游戏目录。",
+  "risk_notes": [
+    "Albedo Controls 是否为母材质实际使用的 albedo 乘数未经实机确认；若进游戏没变红，改试 Albedo Overlay 或 TextureParameterValues['Albedo']",
+    "该 MI 属于 SilkCorsair(2301) 包，需确认游戏里哪套外观用到它才能正确观察",
+    "本次未验证 pak 加载优先级是否真的让新包覆盖同名 MI（排序前缀已按惯例处理）",
+    "手动放入的文件不受 UEModManager 管理；若之后启用/禁用 23 套合集，会连带影响 P1 的依赖"
+  ]
+}

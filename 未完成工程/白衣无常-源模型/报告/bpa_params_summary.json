@@ -1,0 +1,310 @@
+{
+  "source": "CUE4Parse 1.2.2.202611 + 明末 usmap v0 + 明末 AES key",
+  "file": "bpa_params_full.txt",
+  "assets": {
+    "BPA_Jiggle_blendshape": {
+      "spring_stiffness": [
+        400.0,
+        400.0
+      ],
+      "spring_damping": [
+        8.0,
+        8.0
+      ],
+      "chain_bone_axis": [
+        "EAxis::X"
+      ],
+      "alpha_curve_names": [
+        "None"
+      ],
+      "bone_names": [
+        "Breast_jnt_L01",
+        "Breast_jnt_R01",
+        "None",
+        "hair14"
+      ],
+      "node_types": [
+        "ComponentToLocalSpace",
+        "LinkedInputPose",
+        "LocalToComponentSpace",
+        "Root",
+        "SpringBone",
+        "Trail"
+      ],
+      "trail_nodes": 1,
+      "spring_nodes": 2,
+      "interesting_props": 135
+    },
+    "BPA_Jiggle_BodyRoot": {
+      "spring_stiffness": [
+        400.0,
+        400.0,
+        500.0,
+        450.0,
+        800.0,
+        800.0,
+        500.0,
+        500.0
+      ],
+      "spring_damping": [
+        8.0,
+        8.0,
+        5.5,
+        6.0,
+        8.0,
+        8.0,
+        6.0,
+        6.0
+      ],
+      "chain_bone_axis": [],
+      "alpha_curve_names": [
+        "None"
+      ],
+      "bone_names": [
+        "Breast_jnt_L01",
+        "Breast_jnt_R01",
+        "SHip4Target_L",
+        "SHip4Target_R",
+        "SHip5Target_L",
+        "SHip5Target_R",
+        "SHip6Target_L",
+        "SHip6Target_R"
+      ],
+      "node_types": [
+        "ComponentToLocalSpace",
+        "LinkedInputPose",
+        "LocalToComponentSpace",
+        "Root",
+        "SpringBone"
+      ],
+      "trail_nodes": 0,
+      "spring_nodes": 8,
+      "interesting_props": 248
+    },
+    "BPA_Jiggle_HairRoot": {
+      "spring_stiffness": [],
+      "spring_damping": [],
+      "chain_bone_axis": [
+        "EAxis::X"
+      ],
+      "alpha_curve_names": [
+        "None"
+      ],
+      "bone_names": [
+        "None",
+        "hair11",
+        "hair14"
+      ],
+      "node_types": [
+        "ComponentToLocalSpace",
+        "LinkedInputPose",
+        "LocalToComponentSpace",
+        "Root",
+        "Trail"
+      ],
+      "trail_nodes": 1,
+      "spring_nodes": 0,
+      "interesting_props": 79
+    },
+    "BPA_Jiggle_PantsRoot": {
+      "spring_stiffness": [
+        200.0,
+        200.0
+      ],
+      "spring_damping": [
+        0.0,
+        0.0
+      ],
+      "chain_bone_axis": [],
+      "alpha_curve_names": [
+        "None"
+      ],
+      "bone_names": [
+        "SHip6_L",
+        "SHip6_R"
+      ],
+      "node_types": [
+        "ComponentToLocalSpace",
+        "LinkedInputPose",
+        "LocalToComponentSpace",
+        "Root",
+        "SpringBone"
+      ],
+      "trail_nodes": 0,
+      "spring_nodes": 2,
+      "interesting_props": 62
+    },
+    "BPA_BWC_TONE": {
+      "spring_stiffness": [],
+      "spring_damping": [],
+      "chain_bone_axis": [
+        "EAxis::X"
+      ],
+      "alpha_curve_names": [
+        "None"
+      ],
+      "bone_names": [
+        "Hip_L",
+        "Hip_R",
+        "None",
+        "RtZsA07_M"
+      ],
+      "node_types": [
+        "ComponentToLocalSpace",
+        "LinkedInputPose",
+        "LocalToComponentSpace",
+        "Root",
+        "Trail"
+      ],
+      "trail_nodes": 1,
+      "spring_nodes": 0,
+      "interesting_props": 92
+    },
+    "BPA_HBWC_QUNZI": {
+      "spring_stiffness": [],
+      "spring_damping": [],
+      "chain_bone_axis": [
+        "EAxis::X"
+      ],
+      "alpha_curve_names": [
+        "None"
+      ],
+      "bone_names": [
+        "HirB04_L",
+        "HirB04_R",
+        "HpZs07_L",
+        "HpZs07_R",
+        "None",
+        "Root_M",
+        "RtZsA07_M",
+        "Sp2ZsA10_M"
+      ],
+      "node_types": [
+        "ComponentToLocalSpace",
+        "LinkedInputPose",
+        "LocalToComponentSpace",
+        "Root",
+        "Trail"
+      ],
+      "trail_nodes": 6,
+      "spring_nodes": 0,
+      "interesting_props": 501
+    },
+    "BPA_WUCH_BWC": {
+      "spring_stiffness": [],
+      "spring_damping": [],
+      "chain_bone_axis": [],
+      "alpha_curve_names": [],
+      "bone_names": [],
+      "node_types": [
+        "CopyPoseFromMesh",
+        "Root"
+      ],
+      "trail_nodes": 0,
+      "spring_nodes": 0,
+      "interesting_props": 4
+    },
+    "BPA_WUCH_BWCTZ": {
+      "spring_stiffness": [],
+      "spring_damping": [],
+      "chain_bone_axis": [],
+      "alpha_curve_names": [],
+      "bone_names": [],
+      "node_types": [
+        "CopyPoseFromMesh",
+        "Root"
+      ],
+      "trail_nodes": 0,
+      "spring_nodes": 0,
+      "interesting_props": 4
+    },
+    "BPA_KouZhi_Body": {
+      "spring_stiffness": [],
+      "spring_damping": [],
+      "chain_bone_axis": [],
+      "alpha_curve_names": [],
+      "bone_names": [],
+      "node_types": [],
+      "trail_nodes": 0,
+      "spring_nodes": 0,
+      "interesting_props": 0
+    },
+    "BPA_KouZhi_Hair": {
+      "spring_stiffness": [],
+      "spring_damping": [],
+      "chain_bone_axis": [],
+      "alpha_curve_names": [],
+      "bone_names": [],
+      "node_types": [
+        "Trail"
+      ],
+      "trail_nodes": 1,
+      "spring_nodes": 0,
+      "interesting_props": 1
+    },
+    "BPA_NJ_yixiu": {
+      "spring_stiffness": [],
+      "spring_damping": [],
+      "chain_bone_axis": [
+        "EAxis::X"
+      ],
+      "alpha_curve_names": [
+        "None"
+      ],
+      "bone_names": [
+        "None",
+        "Xz05_L",
+        "Xz05_R"
+      ],
+      "node_types": [
+        "ComponentToLocalSpace",
+        "LinkedInputPose",
+        "LocalToComponentSpace",
+        "Root",
+        "Trail"
+      ],
+      "trail_nodes": 2,
+      "spring_nodes": 0,
+      "interesting_props": 131
+    },
+    "BPA_HairJiggle": {
+      "spring_stiffness": [],
+      "spring_damping": [],
+      "chain_bone_axis": [],
+      "alpha_curve_names": [],
+      "bone_names": [],
+      "node_types": [
+        "Trail"
+      ],
+      "trail_nodes": 1,
+      "spring_nodes": 0,
+      "interesting_props": 1
+    }
+  },
+  "summary": {
+    "asset_count": 12,
+    "total_interesting_props": 1258,
+    "spring_stiffness_values": [
+      200.0,
+      400.0,
+      450.0,
+      500.0,
+      800.0
+    ],
+    "spring_damping_values": [
+      0.0,
+      5.5,
+      6.0,
+      8.0
+    ],
+    "node_type_totals": {
+      "ComponentToLocalSpace": 7,
+      "LinkedInputPose": 7,
+      "LocalToComponentSpace": 7,
+      "Root": 9,
+      "SpringBone": 3,
+      "Trail": 7,
+      "CopyPoseFromMesh": 2
+    }
+  }
+}

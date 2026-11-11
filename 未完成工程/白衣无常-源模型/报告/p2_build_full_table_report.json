@@ -1,0 +1,28 @@
+{
+  "source_dump": "E:\\steam\\steamapps\\common\\PBZ\\workbuddy\\github_wip\\s7_orig_table_dump.txt",
+  "rows": 54,
+  "target_outfit": "Hun_OutFit_Climax",
+  "target_subrows": {
+    "body": "HunBodyClimax",
+    "hair": "HairStyle_Climax"
+  },
+  "rows_changed": [
+    "Hun_OutFit_Climax",
+    "10年前服装 (ItemId=HunBodyClimax)",
+    "HairStyle_Climax (ItemId=HairStyle_Climax)"
+  ],
+  "array_element_totals": {
+    "BodyClothDataArray": 0,
+    "GroomDataArray": 0,
+    "HeadClothDataArray": 0,
+    "HeadClothDataArrayHatHidden": 0,
+    "UsedInSequences": 0
+  },
+  "our_meshes": {
+    "body": "/Game/Mods/PBZBaiyi/Meshes/SK_BaiyiBody",
+    "head": "/Game/Mods/PBZBaiyi/Meshes/SK_BaiyiHead"
+  },
+  "output": "E:\\steam\\steamapps\\common\\PBZ\\workbuddy\\github_wip\\p2_jsons\\DT_PBZAppearanceTable_Full.json",
+  "name_map_entries": 739,
+  "note": "Array element StructType='AppearanceClothData' is inferred from the PBZ usmap name table; verify via mipatch fromjson round-trip."
+}

@@ -1,0 +1,145 @@
+{
+  "generated": "2026-11-11 02:32",
+  "status": "INSTALLED v4 2026-11-11 08:50 (回退 bObtainableInGame + 借用本体原版 ItemId；等待第四次实机验证)",
+  "second_playtest_0840": {
+    "result": "PARTIAL SUCCESS — 条目出现了（左侧图标格子 + 人物模型），但提示「未解锁，无法装备」；名称显示「？？？？」",
+    "conclusion": "v2 的 ParentTables 修复成功，行已合并进衣柜。剩下的是第二层门槛：解锁状态。",
+    "unlock_mechanism_evidence": [
+      "作者 StandaloneCore 里另有 DT_CollectionGrants（CompositeDataTable，ParentTables 指向 28 张 PBZOutfitSlots/DT_* 表，Table.Data 空）——把各外观表汇总成『授予清单』",
+      "AdditiveWardrobe_9950 的 pak 解出后只有 Game.locres / PBZCollectionWardrobe.locres + .uplugin，.uplugin 仅声明 LocalizationTargets，无解锁逻辑 → 解锁靠 GameFeature 运行时组件（StandaloneDirectRuntime 的 BPC_DirectBodyRuntime 等），而用户已卸载 23 套，我们又是纯资源包",
+      "UE4SS 里早期留下的 BaiyiUnlock 只读探针读到 BP_AppearanceComp_C 有 OwnedOutfits / CachedOwnedOutfits / UnlockedIds / DefaultOutfits / OutfitIDs / CachedOutfit / CurrentOutfit / bForceDefaultAppearance",
+      "Epic 官方《Data Driven Gameplay Elements》只覆盖普通 DataTable/CSV，不涉及 CompositeDataTable 父表或解锁 → 本项目按实测资产结构处理"
+    ],
+    "v3_changes": [
+      "【推断，非官方】把 3 行的 bObtainableInGame 由 True 改为 False：语义上 True=需在游戏中获得（对应解锁门槛），作者靠运行时组件授予，我们不带运行时 → 尝试让资产本身标记为固有可用。单变量改动，回读确认 3 行均为 False",
+      "重新 fromjson → to-zen（ucas 55,632 B）；游戏退出后覆盖安装，3/3 HASH_MATCH",
+      "新增只读 UE4SS 诊断探针 workbuddy/tools/diagnostics/BaiyiDiag_main.lua → 部署到 platform/steam/ue4ss/Mods/BaiyiDiag/{enabled.txt,Scripts/main.lua}，并在 mods.txt 追加 BaiyiDiag : 1（Keybinds 仍保持最后一行）",
+      "探针绝不调用任何 UFunction（早期 BaiyiUnlock v1/v2 因调 UnlockOutfit 触发 0xC0000005）；只用 FindAllOf / StaticFindObject / 属性读取 / GetFullName / GetArrayNum / Get，这些已在 v3 验证安全"
+    ],
+    "name_note": "「？？？？」更可能是游戏对未解锁条目的占位名（推断）。若 v3 解锁成功，中文 FText（HistoryType=Base + CultureInvariantString）可能直接显示；若解锁后仍是问号，再补自制 locres（AdditiveWardrobe 的 pak 已给出确切路径格式）。",
+    "probe_purpose": "若 v3 仍不能装备，读 UE4SS.log 里 [BaiyiDiag] 输出，一次判定是『行没合并』还是『OwnedOutfits/UnlockedIds 不含 ItemId』，并看到运行时 ParentTables / RowMap 状态，不再盲改配置。"
+  },
+  "first_playtest_0830": {
+    "result": "FAILED — 外观界面一件服装都没有（截图 20261111083004_1.jpg，显示「空」与「？？？？」）",
+    "diagnosis": "聚合表确实生效了（原版行被清空），但父表未合并 → ParentTables 硬引用解析失败。这不是包没挂载，而是引用指向 UnknownExport / /Engine/UnknownPackage。正是原报告列出的第一风险。",
+    "evidence": [
+      "生成的聚合表 JSON 里 ParentTables[0].Value=-7 → Imports[6].ObjectName='UnknownExport'，其 OuterIndex=-6 → Imports[5].ObjectName='/Engine/UnknownPackage'（Zen→legacy 转换时的降级）",
+      "UE4SS.log 08:29:47 有 BaiyiUnlock 只读探针，读到 BP_AppearanceComp_C 的 OwnedOutfits / UnlockedIds / DefaultOutfits / OutfitIDs —— 说明还存在『解锁状态』这一层，若行出现但仍不显示，下一步查这里",
+      "游戏与管理器进程均已退出，可安全覆盖"
+    ],
+    "fix_v2": [
+      "Imports[5].ObjectName → /Game/Mods/PBZOutfitSlots/DT_BaiyiAppearance (Package)",
+      "Imports[6].ObjectName → DT_BaiyiAppearance；ClassPackage=/Script/Engine；ClassName=DataTable",
+      "ParentTables 保持 1 项；回读验证 import[6] 外層包路径正确",
+      "试过删除 28 对未使用的降级 import，但 retoc to-zen 会 panic 'index out of bounds: the len is 0 but the index is 1' → 已回退，保留惰性元数据",
+      "重新 fromjson → to-zen，新 ucas 55,632 B；Zen 包内 UnknownExport=0",
+      "覆盖安装 ~mods 里我们自己的 3 个文件，3/3 HASH_MATCH，未动其它 6 个文件"
+    ]
+  },
+  "install_record": {
+    "time": "2026-11-11 08:26 +08:00",
+    "target_dir": "E:/steam/steamapps/common/PBZ/ProjectPBZ/Content/Paks/~mods/",
+    "layout": "三件套平铺放根部，无子目录",
+    "hash_check": "v1/v2/v3/v4 均 3/3 HASH_MATCH (v4: pak 347 B / utoc 650 B / ucas 55632 B)",
+    "precheck": "目标目录原有 6 文件、无同名冲突、无子目录；UEModManager 已不在运行（CloseMainWindow 无需执行）",
+    "postcheck": "~mods 现 9 文件；按 C 字典序 zzzzzzzzz_PBZ_BaiyiSlot_P.utoc 排最后；安装后 UnrealPak -List 仍能列出 2 条正确路径",
+    "unchanged": "未删除或覆盖任何原有文件"
+  },
+  "goal": "独立新增服装槽位的最小可安装 mod；观察对象唯一（衣柜里只会有一个我们自命名的条目），零外部服装 mod 依赖。",
+  "deliverable": {
+    "dir": "workbuddy/github_wip/s2_final/",
+    "files": {
+      "zzzzzzzzz_PBZ_BaiyiSlot_P.pak": 347,
+      "zzzzzzzzz_PBZ_BaiyiSlot_P.utoc": 650,
+      "zzzzzzzzz_PBZ_BaiyiSlot_P.ucas": 55632
+    },
+    "install_path": "E:/steam/steamapps/common/PBZ/ProjectPBZ/Content/Paks/~mods/ (三件套平铺放根部)",
+    "installed": true,
+    "game_tested": true,
+    "version": "v4"
+  },
+  "mechanism": {
+    "finding": "游戏本体原版 DT_PBZAppearanceTable 实际是 UCompositeDataTable；Data 只有 ParentTables(数组引用) + RowStruct，Table.Data 为空。它靠 ParentTables 加载各外观表，不需要 GameFeature 运行时框架，也不需要导出原版表全部行。",
+    "evidence": [
+      "StandaloneCore_9991 里覆盖并清空了 ProjectPBZ/Content/PBZContent/DataTable/UI/DT_PBZAppearanceTable.uasset（转出的 legacy .uexp 仅 136 B、零行）",
+      "那张清空版表的 name map 列出 29 个 /Game/Mods/PBZOutfitSlots/DT_* 路径",
+      "tojson 后确认 Exports[0].Data 只有 ParentTables(29 个 ObjectPropertyData, Value=-7/-9/-11...) 与 RowStruct=-5；Imports[0] 是 CompositeDataTable",
+      "EmptyWardrobeSlots_100 / StandaloneEmptySlots_101 是 Mods/PBZOutfitSlots/ 下的空表占位；各套 Slot_*_9960 覆盖对应表"
+    ]
+  },
+  "tables": [
+    {
+      "path": "ProjectPBZ/Content/Mods/PBZOutfitSlots/DT_BaiyiAppearance.uasset",
+      "rows": [
+        "Hun_OutFit_BaiyiWuchang (Outfit)",
+        "BaiyiAppearance_Body (Body)",
+        "BaiyiAppearance_Head (Hairstyle)"
+      ],
+      "display_name": "白衣无常 / 白衣无常 · 身体 / 白衣无常 · 发型",
+      "display_name_encoding": "FText HistoryType=Base + CultureInvariantString (UTF-16LE, 6 hits in ucas)；第一版误用 StrPropertyData.Value 写入，回读变 None，已修正",
+      "mesh_refs": {
+        "BodyMeshAsset": "/HuaShira/Characters/Hero/Hero_Hun/SkinParts/Hun_Body_Simple",
+        "HeadAsset": "/HuaShira/Characters/Hero/Hero_Hun/SkinParts/Hun_Head_New",
+        "AppearanceTexture": "/Game/PBZContent/UI/UINew/items/T_Icon_Appearance_ChuanCheng"
+      },
+      "note": "网格/图标全部引用游戏本体资产，不打包任何网格；后续 P2 再换成白衣无常自己的 cooked 网格"
+    },
+    {
+      "path": "ProjectPBZ/Content/PBZContent/DataTable/UI/DT_PBZAppearanceTable.uasset",
+      "purpose": "覆盖游戏本体原版表；CompositeDataTable 的 ParentTables 由 29 缩减为 1，只指向 DT_BaiyiAppearance",
+      "side_effect": "原版行被清空 → 测试期间衣柜只剩我们这一套；删掉 mod 即完全恢复。这正好让观察对象唯一。"
+    }
+  ],
+  "pipeline": [
+    "retoc to-legacy --version UE5_7（global.utoc/ucas + 目标 mod 容器，补 ScriptObjects）→ legacy .uasset/.uexp",
+    "mipatch tojson <uasset> <json> <PBZ usmap>（UAssetAPI SerializeJson）",
+    "workbuddy/tools/build_baiyi_tables.py 改 JSON：新表名/行名/ItemId、中文 FText、本体网格图标、ParentTables 缩到 1、91 个未使用的作者 FName 中性化为 Unused_<i>",
+    "mipatch fromjson <json> <uasset> <PBZ usmap>（必须 rebuilt.Mappings = map，否则 EnumPropertyData.Write 空引用）",
+    "retoc to-zen --version UE5_7 <stageDir> <out.utoc> → 标准三件套",
+    "静态验证：retoc info / UnrealPak -List / retoc unpack round-trip / 二进制关键字扫描"
+  ],
+  "static_verification": {
+    "retoc_info": "Indexed / ReplaceIoChunkHashWithIoHash / mount_point=../../../ / chunks=3 / packages=2 / SoftPackageReferencesOffset / 无压缩 —— 与能跑的参照包结构一致",
+    "unrealpak_list": "两条路径逐字符正确：../../../ProjectPBZ/Content/Mods/PBZOutfitSlots/DT_BaiyiAppearance.uasset (32218 B) 与 ../../../ProjectPBZ/Content/PBZContent/DataTable/UI/DT_PBZAppearanceTable.uasset (23220 B)",
+    "roundtrip_unpack": "提出 2 个 Zen package，路径与大小一致",
+    "binary_scan": "白衣无常 UTF-16LE ×6；DT_BaiyiAppearance ×4；Hun_OutFit_BaiyiWuchang ×1；Hun_Body_Simple ×6；PBZFourOutfits=0；PBZWardrobe=0；Engine/Config=0；ShaderArchive=0",
+    "json_readback": "3 行名正确、ParentTables=1(Value=-7)、网格路径正确、中文显示名 HistoryType=Base 保住",
+    "game_dir_untouched": "~mods 仍 6 文件，无 BaiyiSlot"
+  },
+  "known_risks": [
+    "【v4 待验证】借用 ItemId 是否真能过解锁门槛属推断；若仍「未解锁」，升级后的 BaiyiDiag 探针会打印 OwnedOutfits/DefaultOutfits 的真实元素，据此改用确切 ID，不再盲改。",
+    "【v2 已修复，待实机确认】ParentTables 硬引用原本被降级成 UnknownExport + /Engine/UnknownPackage，已在 v2 中改为真实包路径 /Game/Mods/PBZOutfitSlots/DT_BaiyiAppearance + 对象 DT_BaiyiAppearance(Engine/DataTable)。第二次进游戏判定是否生效。",
+    "若 v2 仍不显示：下一层原因是『解锁状态』。UE4SS 日志里 BaiyiUnlock 探针读到 BP_AppearanceComp_C 有 OwnedOutfits / UnlockedIds / DefaultOutfits / OutfitIDs；作者 StandaloneCore 里另有 DT_CollectionGrants。届时装一个只读 Lua 探针直接读运行时 RowMap 与这些集合，一次定位，不再盲改。",
+    "若 ParentTables 不生效，回退方案：用已安装的 PBZModLoader 2.1.0 写 JS 运行时注册（零其它 mod 资产依赖），或改成扫描式目录布局。",
+    "FText 的 Namespace/Key 仍为 Default/Baiyi_Outfit_Name；若游戏优先查 locres 且无条目，可能显示 key 而非中文。届时可补一个自制 locres（P0.4 已确认 AdditiveWardrobe 用 10 个 locres）。",
+    "测试期间原版服装会从衣柜消失（聚合表行被清空），删 mod 即恢复；这是有意的最小验证取舍。",
+    "网格先用本体占位，不是白衣无常成品外观；P2 才换自有网格/贴图/材质。"
+  ],
+  "next_step": "用户完整重启一次游戏（必须重启，旧容器驻留内存）→ 看衣柜是否出现「白衣无常」且能装备。无论成败都读 UE4SS.log 的 [BaiyiDiag] 输出：成功则进 P2 换自有网格/材质；失败则按日志里真实的已拥有 ItemId 精确重打包。卸载 = 删 ~mods 里这 3 个文件 + 删 BaiyiDiag/ 目录并从 mods.txt 移除该行。",
+  "third_playtest_0849": {
+    "result": "FAILED (regression) — 截图 20261111084910_1.jpg：外观列表又全部消失，只剩「空」与「？？？？」，与 08:30 首测画面一致",
+    "diagnosis": "v3 把 bObtainableInGame 由 True 改成 False 后条目被彻底过滤 →【实测结论】该字段 False = 完全隐藏，不是解锁开关。上一轮基于字段语义的推断方向相反，已证伪。",
+    "user_proposal": "用户建议：若新增槽位实在做不到，改为「借用已有装备的位置、取代某一个特定槽位」，因为每个槽位名字不同，确定取代的名字就知道该测试哪个。",
+    "base_game_outfit_ids": [
+      "Hun_OutFit_Default",
+      "Hun_OutFit_Climax",
+      "Hun_OutFit_Climax_Hat",
+      "Hun_OutFit_FengXue",
+      "Hun_OutFit_GuYou",
+      "Hun_OutFit_JiGuanMoQu",
+      "Hun_OutFit_MoTian",
+      "Hun_OutFit_YaYu",
+      "Hun_OutFit_ZhuiMing"
+    ],
+    "id_evidence": "从 P0.8 导出的游戏本体原版 DT_PBZAppearanceTable.uasset (51,288 B, Zen package) 的 FName 明文段实测读出 9 个 Hun_OutFit_* 行名，以及 T_Icon_Appearance_{ChuanCheng,FengXue,GuYou,HeiShangTao*,JiGuanMoQu,WuLinChuanShuo,ZhuiMing} 图标名 → 取代候选已确定，无需 FModel 导出原版表。",
+    "v4_changes": [
+      "bObtainableInGame 回退 True（实测依据）",
+      "【推断，非官方】Outfit 行 ItemId 由 Hun_OutFit_BaiyiWuchang 改为本体原版 ID Hun_OutFit_Default；行名保持我们的，中文显示名「白衣无常」保留 → 观察对象仍唯一。依据：运行时探针证实 BP_AppearanceComp_C 存在 DefaultOutfits / OwnedOutfits TSet，默认外观必然被拥有；解锁门槛很可能是按 ItemId 查这些集合。",
+      "模板 PBZItemTypeTag / AddTagWhenHas / AddTagWhenUse 均为空 tag (IsZero=true)，不控解锁 → 排除字段干扰",
+      "重新 fromjson → to-zen；ucas 55,632 B；容器里 Hun_OutFit_Default ×2、UnknownExport=0、PBZFourOutfits=0；游戏退出后覆盖安装 3/3 HASH_MATCH",
+      "只读诊断探针升级到 v4：延迟 12s→20s（12s 时组件还没生成，components=0），并对 OwnedOutfits/DefaultOutfits/UnlockedIds 尝试 GetArrayNum+Get / ForEach / pairs 三种只读遍历，打印真实内容；同时 dump 两张表 RowMap 键。仍绝不调用 UFunction。"
+    ],
+    "probe_log_0849": "UE4SS.log 08:48:52 [BaiyiDiag] 首版：FindAllOf(DataTable)=311、StaticFindObject 两张表对象都存在但 GetFullName 返回 ?，属性 ParentTables/RowMap 均未展开；BaiyiUnlock 08:48:57 读到 TSet 类型但未列元素 → 因此升级探针。",
+    "why_not_pure_asset_replacement_yet": "「不覆盖主表、只替换某个原版网格/材质资产」是零解锁风险的最终形态，但需要先有 cooked 自有网格（P2）。当前 v4 是最小改动、可立即验证链路的做法。"
+  }
+}

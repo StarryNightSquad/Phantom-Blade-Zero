@@ -1,0 +1,446 @@
+{
+  "root": "Data/games/phantom-blade-zero/library/6300d6730584",
+  "package_count": 88,
+  "packages": {
+    "zz_PBZ_EmptyWardrobeSlots_100": {
+      "pak": 347,
+      "ucas": 421544,
+      "utoc": 2422
+    },
+    "zz_PBZ_StandaloneEmptySlots_101": {
+      "pak": 347,
+      "ucas": 930320,
+      "utoc": 3258
+    },
+    "zzz_PBZ_WuchangFangYao_1005": {
+      "pak": 347,
+      "ucas": 108345091,
+      "utoc": 31985
+    },
+    "zzzzz_PBZ_FoxRain_2208": {
+      "pak": 347,
+      "ucas": 138616103,
+      "utoc": 37186
+    },
+    "zzzzzz_PBZ_GoldenTiger_2302": {
+      "pak": 347,
+      "ucas": 66614830,
+      "utoc": 22416
+    },
+    "zzzzzz_PBZ_SilkCorsair_2301": {
+      "pak": 347,
+      "ucas": 149664393,
+      "utoc": 44841
+    },
+    "zzzzzzzz_PBZ_2BCinematicFace_9999": {
+      "pak": 1647,
+      "ucas": 30645,
+      "utoc": 607
+    },
+    "zzzzzzzz_PBZ_2BOptions_9997": {
+      "pak": 1545,
+      "ucas": 102039965,
+      "utoc": 22230
+    },
+    "zzzzzzzz_PBZ_AdditiveWardrobe_9950": {
+      "pak": 41411,
+      "ucas": 190279,
+      "utoc": 1400
+    },
+    "zzzzzzzz_PBZ_BaiCinematicHead_9999": {
+      "pak": 1664,
+      "ucas": 138007,
+      "utoc": 634
+    },
+    "zzzzzzzz_PBZ_BaiLightChannel_9999": {
+      "pak": 1637,
+      "ucas": 11075,
+      "utoc": 607
+    },
+    "zzzzzzzz_PBZ_ClimaxPreviewHair_9945": {
+      "pak": 1729,
+      "ucas": 15991,
+      "utoc": 610
+    },
+    "zzzzzzzz_PBZ_CollectionFaceTrial_9970": {
+      "pak": 347,
+      "ucas": 25565,
+      "utoc": 511
+    },
+    "zzzzzzzz_PBZ_Converted_DiYiHouYi_3001": {
+      "pak": 347,
+      "ucas": 102810713,
+      "utoc": 26494
+    },
+    "zzzzzzzz_PBZ_Converted_OutFit_2B_3001": {
+      "pak": 347,
+      "ucas": 435455693,
+      "utoc": 89940
+    },
+    "zzzzzzzz_PBZ_Corsair_3304": {
+      "pak": 347,
+      "ucas": 135645676,
+      "utoc": 40450
+    },
+    "zzzzzzzz_PBZ_HuanGuiMerged_9990": {
+      "pak": 1535,
+      "ucas": 74155162,
+      "utoc": 16427
+    },
+    "zzzzzzzz_PBZ_MingMoHairResidency_9983": {
+      "pak": 1561,
+      "ucas": 51231,
+      "utoc": 616
+    },
+    "zzzzzzzz_PBZ_MuCinematicHead_9999": {
+      "pak": 1657,
+      "ucas": 4030004,
+      "utoc": 1591
+    },
+    "zzzzzzzz_PBZ_NativeBaiAppearance_9980": {
+      "pak": 4542,
+      "ucas": 36282399,
+      "utoc": 9422
+    },
+    "zzzzzzzz_PBZ_NativeBaiFallback_9953": {
+      "pak": 347,
+      "ucas": 105462,
+      "utoc": 881
+    },
+    "zzzzzzzz_PBZ_NativeMuAppearance_9981": {
+      "pak": 4372,
+      "ucas": 5920828,
+      "utoc": 3193
+    },
+    "zzzzzzzz_PBZ_NativeMuColors_9992": {
+      "pak": 1556,
+      "ucas": 507958167,
+      "utoc": 105576
+    },
+    "zzzzzzzz_PBZ_NativeMuFallback_9954": {
+      "pak": 347,
+      "ucas": 105462,
+      "utoc": 881
+    },
+    "zzzzzzzz_PBZ_NianSuiChang_3301": {
+      "pak": 347,
+      "ucas": 75443468,
+      "utoc": 21050
+    },
+    "zzzzzzzz_PBZ_ObsessionDemon_3500": {
+      "pak": 347,
+      "ucas": 101370944,
+      "utoc": 32336
+    },
+    "zzzzzzzz_PBZ_PBZBrideBlindfold_9999": {
+      "pak": 1524,
+      "ucas": 22379,
+      "utoc": 601
+    },
+    "zzzzzzzz_PBZ_PBZYuFangBlindfold_9999": {
+      "pak": 3968,
+      "ucas": 22604,
+      "utoc": 604
+    },
+    "zzzzzzzz_PBZ_PerfectBrideAppearance_9987": {
+      "pak": 4620,
+      "ucas": 106153200,
+      "utoc": 32283
+    },
+    "zzzzzzzz_PBZ_PerfectBrideFallback_9955": {
+      "pak": 347,
+      "ucas": 147618,
+      "utoc": 1089
+    },
+    "zzzzzzzz_PBZ_PerfectBrideHeadTick_9994": {
+      "pak": 347,
+      "ucas": 25076,
+      "utoc": 515
+    },
+    "zzzzzzzz_PBZ_QueenMarikaColors_9987": {
+      "pak": 1513,
+      "ucas": 101307,
+      "utoc": 2144
+    },
+    "zzzzzzzz_PBZ_QueenMarika_3900": {
+      "pak": 347,
+      "ucas": 602128134,
+      "utoc": 170871
+    },
+    "zzzzzzzz_PBZ_QueenSwitch_9978": {
+      "pak": 347,
+      "ucas": 34700,
+      "utoc": 514
+    },
+    "zzzzzzzz_PBZ_ShamanAppearance_9988": {
+      "pak": 4324,
+      "ucas": 122214566,
+      "utoc": 38043
+    },
+    "zzzzzzzz_PBZ_ShamanCharacterAppearance_9989": {
+      "pak": 4775,
+      "ucas": 158244431,
+      "utoc": 41437
+    },
+    "zzzzzzzz_PBZ_ShamanCharacterFallback_9957": {
+      "pak": 347,
+      "ucas": 168696,
+      "utoc": 1199
+    },
+    "zzzzzzzz_PBZ_ShamanFallback_9956": {
+      "pak": 347,
+      "ucas": 147618,
+      "utoc": 1089
+    },
+    "zzzzzzzz_PBZ_ShamanHairColors_9999": {
+      "pak": 1494,
+      "ucas": 58059,
+      "utoc": 589
+    },
+    "zzzzzzzz_PBZ_SingleFaceNativeBai_9996": {
+      "pak": 347,
+      "ucas": 76937,
+      "utoc": 689
+    },
+    "zzzzzzzz_PBZ_SingleFaceNativeMu_9996": {
+      "pak": 347,
+      "ucas": 75656,
+      "utoc": 686
+    },
+    "zzzzzzzz_PBZ_SingleFaceYuYaoBai_9996": {
+      "pak": 347,
+      "ucas": 56615,
+      "utoc": 683
+    },
+    "zzzzzzzz_PBZ_SingleFaceYuYaoOriginal_9996": {
+      "pak": 347,
+      "ucas": 57991,
+      "utoc": 698
+    },
+    "zzzzzzzz_PBZ_Slot_CorsairAppearance_9960": {
+      "pak": 347,
+      "ucas": 34606,
+      "utoc": 465
+    },
+    "zzzzzzzz_PBZ_Slot_DiYiHouYi_9960": {
+      "pak": 347,
+      "ucas": 34969,
+      "utoc": 457
+    },
+    "zzzzzzzz_PBZ_Slot_FangYaoAppearance_9960": {
+      "pak": 1484,
+      "ucas": 85659,
+      "utoc": 931
+    },
+    "zzzzzzzz_PBZ_Slot_FoxRainAppearance_9960": {
+      "pak": 347,
+      "ucas": 34626,
+      "utoc": 465
+    },
+    "zzzzzzzz_PBZ_Slot_GoldenTigerAppearance_9960": {
+      "pak": 347,
+      "ucas": 34658,
+      "utoc": 469
+    },
+    "zzzzzzzz_PBZ_Slot_NianSuiChangAppearance_9960": {
+      "pak": 347,
+      "ucas": 34624,
+      "utoc": 470
+    },
+    "zzzzzzzz_PBZ_Slot_ObsessionDemonAppearance_9960": {
+      "pak": 347,
+      "ucas": 34636,
+      "utoc": 472
+    },
+    "zzzzzzzz_PBZ_Slot_OutFit_2B_9960": {
+      "pak": 347,
+      "ucas": 34969,
+      "utoc": 457
+    },
+    "zzzzzzzz_PBZ_Slot_QueenMarikaAppearance_9960": {
+      "pak": 347,
+      "ucas": 36492,
+      "utoc": 469
+    },
+    "zzzzzzzz_PBZ_Slot_SilkCorsairAppearance_9960": {
+      "pak": 347,
+      "ucas": 34658,
+      "utoc": 469
+    },
+    "zzzzzzzz_PBZ_Slot_TachyAppearance_9960": {
+      "pak": 347,
+      "ucas": 34594,
+      "utoc": 463
+    },
+    "zzzzzzzz_PBZ_Slot_ToadChiefAppearance_9960": {
+      "pak": 347,
+      "ucas": 34610,
+      "utoc": 467
+    },
+    "zzzzzzzz_PBZ_Slot_WanRuoYouLongAppearance_9960": {
+      "pak": 347,
+      "ucas": 34626,
+      "utoc": 471
+    },
+    "zzzzzzzz_PBZ_Slot_YenneferAppearance_9960": {
+      "pak": 347,
+      "ucas": 34608,
+      "utoc": 466
+    },
+    "zzzzzzzz_PBZ_StandaloneBrideFangHair_9992": {
+      "pak": 1525,
+      "ucas": 111265,
+      "utoc": 1922
+    },
+    "zzzzzzzz_PBZ_StandaloneCore_9991": {
+      "pak": 347,
+      "ucas": 15361056,
+      "utoc": 3687
+    },
+    "zzzzzzzz_PBZ_StandaloneDirect2B_9984": {
+      "pak": 347,
+      "ucas": 9883778,
+      "utoc": 2602
+    },
+    "zzzzzzzz_PBZ_StandaloneDirectQueen_9984": {
+      "pak": 347,
+      "ucas": 13607197,
+      "utoc": 3283
+    },
+    "zzzzzzzz_PBZ_StandaloneDirectRuntime_9983": {
+      "pak": 1540,
+      "ucas": 25328,
+      "utoc": 674
+    },
+    "zzzzzzzz_PBZ_StandaloneDirectValby_9984": {
+      "pak": 347,
+      "ucas": 9744293,
+      "utoc": 2674
+    },
+    "zzzzzzzz_PBZ_StandaloneYuYaoColors_9998": {
+      "pak": 1517,
+      "ucas": 714841830,
+      "utoc": 136364
+    },
+    "zzzzzzzz_PBZ_Tachy_3700": {
+      "pak": 347,
+      "ucas": 152495682,
+      "utoc": 37341
+    },
+    "zzzzzzzz_PBZ_ToadChief_3302": {
+      "pak": 347,
+      "ucas": 27804846,
+      "utoc": 9065
+    },
+    "zzzzzzzz_PBZ_ValbyCinematicHead_9999": {
+      "pak": 1668,
+      "ucas": 26565,
+      "utoc": 616
+    },
+    "zzzzzzzz_PBZ_ValbyFaceFix_9999": {
+      "pak": 1484,
+      "ucas": 15362466,
+      "utoc": 3830
+    },
+    "zzzzzzzz_PBZ_WanRuoHornOptions_9992": {
+      "pak": 1491,
+      "ucas": 265540,
+      "utoc": 1835
+    },
+    "zzzzzzzz_PBZ_WanRuoYouLong_3800": {
+      "pak": 347,
+      "ucas": 117694815,
+      "utoc": 33329
+    },
+    "zzzzzzzz_PBZ_WardrobeHeadHandoff_9989": {
+      "pak": 1547,
+      "ucas": 30112,
+      "utoc": 674
+    },
+    "zzzzzzzz_PBZ_WardrobeUtilities_9986": {
+      "pak": 1569,
+      "ucas": 63575,
+      "utoc": 1292
+    },
+    "zzzzzzzz_PBZ_Yennefer_3303": {
+      "pak": 347,
+      "ucas": 106044775,
+      "utoc": 29320
+    },
+    "zzzzzzzz_PBZ_YuYaoAppearance_9976": {
+      "pak": 4192,
+      "ucas": 38589194,
+      "utoc": 12961
+    },
+    "zzzzzzzz_PBZ_YuYaoArmorBase_9999": {
+      "pak": 1524,
+      "ucas": 2572718353,
+      "utoc": 475718
+    },
+    "zzzzzzzz_PBZ_YuYaoBaiAppearance_9977": {
+      "pak": 4450,
+      "ucas": 24789415,
+      "utoc": 6777
+    },
+    "zzzzzzzz_PBZ_YuYaoBaiCapeMotion_9999": {
+      "pak": 347,
+      "ucas": 12697830,
+      "utoc": 2773
+    },
+    "zzzzzzzz_PBZ_YuYaoBaiCinematicHead_9999": {
+      "pak": 1689,
+      "ucas": 49491,
+      "utoc": 625
+    },
+    "zzzzzzzz_PBZ_YuYaoBaiFallback_9951": {
+      "pak": 347,
+      "ucas": 21142,
+      "utoc": 463
+    },
+    "zzzzzzzz_PBZ_YuYaoFangCGFaceFix_9999": {
+      "pak": 347,
+      "ucas": 21092,
+      "utoc": 509
+    },
+    "zzzzzzzz_PBZ_YuYaoFangCinematicFace_9999": {
+      "pak": 1696,
+      "ucas": 25087,
+      "utoc": 628
+    },
+    "zzzzzzzz_PBZ_YuYaoFangMuCape_9999": {
+      "pak": 1519,
+      "ucas": 33866,
+      "utoc": 1096
+    },
+    "zzzzzzzz_PBZ_YuYaoOriginalAppearance_9978": {
+      "pak": 4650,
+      "ucas": 40659000,
+      "utoc": 10109
+    },
+    "zzzzzzzz_PBZ_YuYaoOriginalBlindfold_9979": {
+      "pak": 1578,
+      "ucas": 2084404,
+      "utoc": 2042
+    },
+    "zzzzzzzz_PBZ_YuYaoOriginalCapeMotion_9999": {
+      "pak": 347,
+      "ucas": 13628281,
+      "utoc": 2951
+    },
+    "zzzzzzzz_PBZ_YuYaoOriginalCinematicHead_9999": {
+      "pak": 1724,
+      "ucas": 61998,
+      "utoc": 640
+    },
+    "zzzzzzzz_PBZ_YuYaoOriginalFallback_9952": {
+      "pak": 347,
+      "ucas": 42212,
+      "utoc": 566
+    },
+    "zzzzzzzz_PBZ_YuYaoOriginalHatFit_9997": {
+      "pak": 347,
+      "ucas": 6913333,
+      "utoc": 2091
+    }
+  }
+}

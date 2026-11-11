@@ -1,0 +1,230 @@
+{
+  "fbx": [
+    {
+      "file": "Baiyi_Body_ShortHair.fbx",
+      "size_bytes": 11456476,
+      "objects": [
+        [
+          "HunSkinSkel",
+          "ARMATURE"
+        ],
+        [
+          "WuCh_BLYR_Pants",
+          "MESH"
+        ],
+        [
+          "WUCH_BWC_Jacket",
+          "MESH"
+        ],
+        [
+          "WUCH_NvJuan_Hands",
+          "MESH"
+        ]
+      ],
+      "armatures": [
+        {
+          "name": "HunSkinSkel",
+          "bone_count": 1134,
+          "first12": [
+            "root",
+            "pelvis",
+            "spine_01",
+            "spine_02",
+            "spine_03",
+            "spine_04",
+            "spine_05",
+            "neck_01",
+            "neck_02",
+            "head",
+            "hat",
+            "Hair_3_01"
+          ],
+          "has_root_at_0": true,
+          "pelvis_index": 1,
+          "ik_weapon_root_index": 1129
+        }
+      ],
+      "meshes": [
+        {
+          "name": "WuCh_BLYR_Pants",
+          "vertices": 16704,
+          "polygons": 25766,
+          "materials": [
+            "MI_zhijia",
+            "MI_Body.001",
+            "white",
+            "ih_insoles",
+            "ih_soles",
+            "ih_metal"
+          ],
+          "vertex_groups": 10,
+          "max_influences": 3,
+          "zero_weight_vertices": 0,
+          "non_normalized_vertices": 0,
+          "bbox_min": [
+            -18.296,
+            -9.076,
+            0.856
+          ],
+          "bbox_max": [
+            18.091,
+            12.015,
+            114.16
+          ],
+          "modifiers": [
+            [
+              "HunSkinSkel",
+              "ARMATURE",
+              "HunSkinSkel"
+            ]
+          ]
+        },
+        {
+          "name": "WUCH_BWC_Jacket",
+          "vertices": 33132,
+          "polygons": 48477,
+          "materials": [
+            "M_HWC_Qunzi",
+            "M_HWC_XiongGu",
+            "M_HWC_YaoDai01",
+            "M_HWC_LianPI01",
+            "M_HWC_shoubi",
+            "M_HWC_TouGu",
+            "MI_Head",
+            "MI_Body",
+            "invisible"
+          ],
+          "vertex_groups": 15,
+          "max_influences": 4,
+          "zero_weight_vertices": 0,
+          "non_normalized_vertices": 0,
+          "bbox_min": [
+            -32.263,
+            -14.718,
+            48.132
+          ],
+          "bbox_max": [
+            32.264,
+            20.9,
+            165.807
+          ],
+          "modifiers": [
+            [
+              "HunSkinSkel",
+              "ARMATURE",
+              "HunSkinSkel"
+            ]
+          ]
+        },
+        {
+          "name": "WUCH_NvJuan_Hands",
+          "vertices": 24196,
+          "polygons": 44174,
+          "materials": [
+            "M_WCNJ_Jacket",
+            "MI_ZhiJia_base",
+            "MI_Body_Inst"
+          ],
+          "vertex_groups": 37,
+          "max_influences": 4,
+          "zero_weight_vertices": 0,
+          "non_normalized_vertices": 0,
+          "bbox_min": [
+            -40.977,
+            -8.392,
+            85.443
+          ],
+          "bbox_max": [
+            40.977,
+            8.151,
+            119.824
+          ],
+          "modifiers": [
+            [
+              "HunSkinSkel",
+              "ARMATURE",
+              "HunSkinSkel"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "file": "HaiKou_ShortHair_Head.fbx",
+      "size_bytes": 5677244,
+      "objects": [
+        [
+          "HunSkinSkel",
+          "ARMATURE"
+        ],
+        [
+          "SK_CorsairHead",
+          "MESH"
+        ]
+      ],
+      "armatures": [
+        {
+          "name": "HunSkinSkel",
+          "bone_count": 1134,
+          "first12": [
+            "root",
+            "pelvis",
+            "spine_01",
+            "spine_02",
+            "spine_03",
+            "spine_04",
+            "spine_05",
+            "neck_01",
+            "neck_02",
+            "head",
+            "hat",
+            "Hair_3_01"
+          ],
+          "has_root_at_0": true,
+          "pelvis_index": 1,
+          "ik_weapon_root_index": 1129
+        }
+      ],
+      "meshes": [
+        {
+          "name": "SK_CorsairHead",
+          "vertices": 41764,
+          "polygons": 56690,
+          "materials": [
+            "MI_FO_bfa4d791a5f2",
+            "MI_FO_934b31c540d2",
+            "MI_Wuchang_Brows_67630add",
+            "MI_Wuchang_Eye_7f573563",
+            "MI_Wuchang_Eyelash_5157e96a",
+            "MI_Wuchang_Head_eedd7a66",
+            "MI_Wuchang_Tear_7427bc8b",
+            "MI_teeth_low_2e7ba38b",
+            "MI_teeth_up_9d491ce7",
+            "MI_tongue_8777624a"
+          ],
+          "vertex_groups": 68,
+          "max_influences": 4,
+          "zero_weight_vertices": 0,
+          "non_normalized_vertices": 0,
+          "bbox_min": [
+            -11.088,
+            -7.596,
+            149.683
+          ],
+          "bbox_max": [
+            10.651,
+            31.661,
+            186.39
+          ],
+          "modifiers": [
+            [
+              "HunSkinSkel",
+              "ARMATURE",
+              "HunSkinSkel"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

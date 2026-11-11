@@ -1,0 +1,128 @@
+{
+  "generated": "2026-11-11 09:10",
+  "zip": "E:/迅雷下载/PBZ Connection Of 23 Cloth V2.0 266 7 2026-11-10T18-24Z yuK0gDLkI.zip",
+  "old_ref": "23 display garments 266 6 2026-11-08T18-47Z KnCjDVt1E(1).zip (V2.4)",
+  "name": "影之刃零 · 23套独立外观合集",
+  "gameBuild": 26367565,
+  "gameplayVerifiedAsNewPackage": false,
+  "zip_bytes": 2699322257,
+  "entries": 296,
+  "uncompressed_bytes": 7123690001,
+  "folders": "ProjectPBZ/Content/Paks/~mods/WuchangClothes/<每套> + WuchangClothes/PBZOutfitCommon",
+  "diff": {
+    "packages_old": 88,
+    "packages_new": 98,
+    "packages_added": 10,
+    "packages_removed": 0,
+    "files_old": 264,
+    "files_new": 294,
+    "files_added": 30,
+    "files_removed": 0,
+    "sha256_common": 264,
+    "sha256_match": 257,
+    "sha256_changed": 7,
+    "changed_files": [
+      "zzzzzzzz_PBZ_CollectionFaceTrial_9970_P.ucas / .utoc (+260 B)",
+      "zzzzzzzz_PBZ_YuYaoArmorBase_9999_P.pak/.ucas/.utoc (-171 B ucas)",
+      "zzzzzzzz_PBZ_YuYaoBaiCapeMotion_9999_P.ucas / .utoc"
+    ],
+    "unchanged_key_packages": [
+      "AdditiveWardrobe_9950 (locres)",
+      "StandaloneCore_9991 (聚合表)",
+      "Slot_CorsairAppearance_9960",
+      "Corsair_3304",
+      "WardrobeUtilities_9986",
+      "StandaloneDirectRuntime_9983"
+    ]
+  },
+  "new_packages": [
+    {
+      "name": "CorsairHairFix_9999",
+      "z": 12,
+      "ucas": 16567276,
+      "assets": [
+        "MI_CorsairHairStable",
+        "覆盖 SK_CorsairHead"
+      ],
+      "note": "海寇头发/马尾专用修复"
+    },
+    {
+      "name": "ImportedHairFixA/B/C_9999",
+      "z": 12,
+      "ucas": [
+        63694358,
+        71788226,
+        28354661
+      ],
+      "assets": [
+        "MI_*HairStable",
+        "覆盖多个 SK_*Head"
+      ],
+      "note": "各套导入头发的稳定材质实例"
+    },
+    {
+      "name": "HairMipBias4_10000",
+      "z": 13,
+      "ucas": 35646,
+      "assets": [
+        "10 个 MI_*HairStable 的 mip 偏移覆盖"
+      ],
+      "note": "【关键】头发消失根因指向 masked 贴图 alpha 在 mip 层被裁"
+    },
+    {
+      "name": "WardrobePoseRecovery_9999",
+      "z": 12,
+      "ucas": 20577,
+      "assets": [
+        "BPC_PoseRecoveryNative (GameFeature)"
+      ],
+      "note": "衣柜姿势恢复"
+    },
+    {
+      "name": "BaiSweat_9999",
+      "z": 12,
+      "ucas": 218905,
+      "assets": [
+        "BPC_BaiSweat (GameFeature)"
+      ],
+      "note": "汗液效果"
+    },
+    {
+      "name": "HuanGuiCGFace_9999",
+      "z": 12,
+      "ucas": 13110,
+      "assets": [
+        "PP_HuanGuiGreenDressFace"
+      ],
+      "note": "CG 面部物理资产"
+    },
+    {
+      "name": "YuYaoNativeGrip_9999",
+      "z": 11,
+      "ucas": 1853408,
+      "assets": [
+        "3 个 PP_*Body"
+      ],
+      "note": "握持相关物理资产"
+    },
+    {
+      "name": "NativeActions_9999",
+      "z": 14,
+      "ucas": 6935929,
+      "assets": [
+        "一批 PP_*BodyExecution 物理资产"
+      ],
+      "note": "补身体物理"
+    }
+  ],
+  "conclusion": "不是重做，是打补丁：主体 23 套服装资产与解锁/衣柜机制一字节没动；10 个新增包全是头发材质/网格、物理资产与 GameFeature 运行时组件修复。印证用户「资产完备，bug 在附加功能」的判断。",
+  "impact_on_our_project": [
+    "解锁与衣柜机制（AdditiveWardrobe locres / StandaloneCore 聚合表 / Slot_* / WardrobeUtilities）全部 UNCHANGED → v4 实机结论与自制 locres 方案不受影响",
+    "CorsairHairFix + HairMipBias4 揭示 masked 头发/布条消失的根因是 mip 层级 alpha 被裁 → P2 的 masked 槽专项（T_BraidOpacity / invisible / M_HWC_XiongGu）应检查 MipBias 与 OpacityMask 阈值",
+    "新版改用 ~mods/WuchangClothes/ 子目录布局，且修复包用 12–14 个 z 前缀排最后；不改变我们 mod 的安装路径定案（本项目不依赖任何其它服装 mod）"
+  ],
+  "artifacts": [
+    "workbuddy/github_wip/idx_23set_v2_new.json",
+    "workbuddy/github_wip/s6_new23_unpack/"
+  ]
+}

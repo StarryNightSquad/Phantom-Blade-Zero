@@ -1,0 +1,31 @@
+{
+  "root": "E:\\steam\\steamapps\\common\\PBZ\\Data\\games\\phantom-blade-zero\\library\\6300d6730584",
+  "containers": {
+    "zzzzzzzz_PBZ_Slot_FoxRainAppearance_9960_P.utoc": [
+      "../../../ProjectPBZ/Content/Mods/PBZOutfitSlots/DT_FoxRainAppearance.uasset",
+      "<ContainerHeader>"
+    ],
+    "zzzzzzzz_PBZ_Slot_CorsairAppearance_9960_P.utoc": [
+      "../../../ProjectPBZ/Content/Mods/PBZOutfitSlots/DT_CorsairAppearance.uasset",
+      "<ContainerHeader>"
+    ],
+    "zzzzzzzz_PBZ_Slot_SilkCorsairAppearance_9960_P.utoc": [
+      "../../../ProjectPBZ/Content/Mods/PBZOutfitSlots/DT_SilkCorsairAppearance.uasset",
+      "<ContainerHeader>"
+    ],
+    "zzzzzzzz_PBZ_CollectionFaceTrial_9970_P.utoc": [
+      "../../../ProjectPBZ/Plugins/GameFeatures/PBZCollectionWardrobe/Content/BPC_CollectionHeadCloth.uasset",
+      "<ContainerHeader>"
+    ],
+    "zzzzzzzz_PBZ_WardrobeHeadHandoff_9989_P.utoc": [
+      "../../../ProjectPBZ/Plugins/GameFeatures/PBZCollectionWardrobe/Content/BPC_WardrobeHeadHandoff.uasset",
+      "../../../ProjectPBZ/Plugins/GameFeatures/PBZWardrobeHeadHandoff/Content/PBZWardrobeHeadHandoff.uasset",
+      "<ContainerHeader>"
+    ],
+    "zzzzzzzz_PBZ_MingMoHairResidency_9983_P.utoc": [
+      "../../../ProjectPBZ/Plugins/GameFeatures/PBZMingMoHairResidency/Content/BPC_MingMoHairResidency.uasset",
+      "../../../ProjectPBZ/Plugins/GameFeatures/PBZMingMoHairResidency/Content/PBZMingMoHairResidency.uasset",
+      "<ContainerHeader>"
+    ]
+  }
+}

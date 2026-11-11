@@ -1,0 +1,5 @@
+"E:/steam/steamapps/common/PBZ/workbuddy/github_wip/s5_locres_stage/ProjectPBZ/Content/Localization/Game/Platforms/Windows/en/Game.locres" "../../../ProjectPBZ/Content/Localization/Game/Platforms/Windows/en/Game.locres"
+"E:/steam/steamapps/common/PBZ/workbuddy/github_wip/s5_locres_stage/ProjectPBZ/Content/Localization/Game/Platforms/Windows/en-US/Game.locres" "../../../ProjectPBZ/Content/Localization/Game/Platforms/Windows/en-US/Game.locres"
+"E:/steam/steamapps/common/PBZ/workbuddy/github_wip/s5_locres_stage/ProjectPBZ/Content/Localization/Game/Platforms/Windows/zh/Game.locres" "../../../ProjectPBZ/Content/Localization/Game/Platforms/Windows/zh/Game.locres"
+"E:/steam/steamapps/common/PBZ/workbuddy/github_wip/s5_locres_stage/ProjectPBZ/Content/Localization/Game/Platforms/Windows/zh-Hans/Game.locres" "../../../ProjectPBZ/Content/Localization/Game/Platforms/Windows/zh-Hans/Game.locres"
+"E:/steam/steamapps/common/PBZ/workbuddy/github_wip/s5_locres_stage/ProjectPBZ/Content/Localization/Game/Platforms/Windows/zh-Hant/Game.locres" "../../../ProjectPBZ/Content/Localization/Game/Platforms/Windows/zh-Hant/Game.locres"

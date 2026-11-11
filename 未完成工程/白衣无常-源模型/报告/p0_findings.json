@@ -1,0 +1,107 @@
+{
+  "generated": "2026-11-10 23:25",
+  "phase": "P0 开工第一轮：布料参数解析 + 槽位表复核 + pak 内容核对",
+  "cloth_physics": {
+    "status": "COMPLETE",
+    "correction": "此前写的「24 个 BPA 资产」不准确，实际是 12 个资产 × (.uasset + .uexp) = 24 个文件",
+    "asset_count": 12,
+    "raw_files": "github_wip/wuchang_cloth_physics/ (12 .uasset + 12 .uexp, 189997 B)",
+    "full_dump": "github_wip/wuchang_cloth_physics/bpa_params_full.txt (3867 行 / 132540 B)",
+    "summary": "github_wip/wuchang_cloth_physics/bpa_params_summary.json",
+    "method": "CUE4Parse 1.2.2.202611 + 明末 usmap v0 + 明末 AES key；pbzprobe bpa 命令递归展开 StructProperty->FScriptStruct->StructType->FStructFallback",
+    "interesting_props": 1258,
+    "spring_stiffness_values": [200, 400, 450, 500, 800],
+    "spring_damping_values": [0, 5.5, 6, 8],
+    "node_types": {
+      "Trail": 7,
+      "SpringBone": 3,
+      "Root": 9,
+      "LocalToComponentSpace": 7,
+      "LinkedInputPose": 7,
+      "ComponentToLocalSpace": 7,
+      "CopyPoseFromMesh": 2
+    },
+    "other_values": {
+      "ChainBoneAxis": "EAxis::X",
+      "bInvertChainBoneAxis": false,
+      "AlphaCurveName": "None",
+      "CDO_scalars": {"OldAlpha": 1, "RandomNum": 0.1, "FixX": 10, "RandomNum_C": 0.1}
+    },
+    "conclusion": "明末是 AnimBlueprint 的 SpringBone/TrailBone 骨骼摆动，不是 ChaosCloth 逐顶点布料；参数数值现已全部可读。首版主线仍可完全不做布料（方案 §9）。"
+  },
+  "p0_3_slot_table": {
+    "status": "COMPLETE (核心结论)",
+    "source_container": "Data/games/phantom-blade-zero/library/88a619138484/zzzzzzzz_PBZ_Slot_CorsairAppearance_9960_P.{pak,utoc,ucas}",
+    "note": "旧库 6300d6730584 已卸载；新版库目录为 88a619138484，~mods/ 里另有一份生效副本",
+    "retoc_info": {
+      "version": "ReplaceIoChunkHashWithIoHash",
+      "container_header_version": "SoftPackageReferencesOffset",
+      "chunks": 2,
+      "packages": 1,
+      "mount_point": "../../../",
+      "compression_methods": []
+    },
+    "retoc_support": "retoc 0.1.5 的 --version 枚举明确含 UE5_7（此前 README 未写明，现已实测确认）",
+    "extraction": "retoc to-legacy 因 mod 容器缺 ScriptObjects chunk 失败（--no-script-objects 也无效）；改用 retoc unpack 成功提取 ProjectPBZ/Content/Mods/PBZOutfitSlots/DT_CorsairAppearance.uasset (34510 B, Zen package)",
+    "table_fields_confirmed": [
+      "PBZAppearanceStruct", "RowStruct", "BodyMeshAsset", "HeadAsset", "ItemId",
+      "AppearanceType", "EAppearanceType", "FlowLocText", "Namespace", "ValueCache"
+    ],
+    "verdict": "11-05 留档的表结构复核通过：确为 /Script/ProjectPBZ.PBZAppearanceStruct，网格字段只有 BodyMeshAsset + HeadAsset 两个（各出现 1 次，为字段定义）→ 一个外观 = 1 body mesh + 1 head mesh，方案 §5.8 的网格合并决策成立。",
+    "row_naming": "每套 3 行，实例如 Hun_OutFit_CodexCorsair / CorsairAppearance_Body / CorsairAppearance_Head；本地化键 Hun_OutFit_CodexCorsair_Name / _Desc",
+    "grid_refs": ["CorsairBody -> SK_CorsairBody", "CorsairHead -> SK_CorsairHead"],
+    "other_item_ids_seen": ["Hun_OutFit_CodexFoxRain", "Hun_OutFit_CodexGoldenTiger", "Hun_OutFit_CodexMuXiaoKui", "Hun_OutFit_CodexFY", "Hun_OutFit_CodexHuanGuiGreenDress"],
+    "minimal_slot_package": "一张 3 行的 DT_*Appearance 表即可（放在 ProjectPBZ/Content/Mods/PBZOutfitSlots/），不需要网格/贴图；.pak 为 347 B 占位，资产在 .ucas/.utoc",
+    "tool_limit": "CUE4Parse DefaultFileProvider 挂裸 .utoc 目录时 Files=0（不把 IoStore 容器当顶层文件）；改用 retoc unpack + Zen package FName 明文扫描达成目的。后续若要程序化读表行值，需改用 IoStoreReader 或 UAssetGUI(.NET 8 运行时)。"
+  },
+  "p0_4_pak_content": {
+    "status": "COMPLETE",
+    "findings": "主体资产全部在 .utoc/.ucas (IoStore)，.pak 只放本地化/插件清单等 legacy 文件",
+    "examples": {
+      "zzzzzz_PBZ_GoldenTiger_2302_P.pak": "0 files（空占位）",
+      "zzzzzzzz_PBZ_AdditiveWardrobe_9950_P.pak": "41411 B / 12 files：10 个 *.locres (en/zh-Hans/zh-Hant/zh/en-US) + PBZCollectionWardrobe.uplugin + .upluginmanifest",
+      "others": "多数 *Appearance_99xx_P.pak 为 4~5 KB，同样是少量文本/配置"
+    },
+    "implication": "我们的三件套里 .pak 可以是占位或只放 locres；服装网格/材质/贴图必须进 .ucas/.utoc。此前『pak 里 400KB~639KB 装了什么』的疑问已澄清——那是旧库的旧数值，当前安装版 pak 普遍很小。"
+  },
+  "ue57_completeness_check": {
+    "question": "用户 23:40 问「你确认 UE5.7 是完整的么？」",
+    "verdict": "完整可用（Epic Launcher 官方安装，5.7.4），cook 所需组件齐全",
+    "evidence": {
+      "Build.version": "Major 5 / Minor 7 / Patch 4 / CL 51494982 / ++UE5+Release-5.7 / IsPromotedBuild=1",
+      "ToolComplete.txt": "0 B，Epic Launcher 安装完成标记",
+      ".egstore": "3 个 manifest，主清单 32,964,078 B（二进制格式，非 JSON）",
+      "UnrealEditor.modules": "517 个模块，BuildId 47537391 = Build.version 的 CompatibleChangelist，二进制与版本一致",
+      "关键文件": ["UnrealEditor.exe", "UnrealEditor-Cmd.exe", "UnrealPak.exe", "ShaderCompileWorker.exe", "UnrealBuildTool.dll", "RunUAT.bat", "Build.bat", "BaseEngine.ini", "DefaultMaterial.uasset", "BasePassPixelShader.usf", "UnrealEditor.target"],
+      "目录规模": "Engine/Binaries 13530、Config 81、Content 28456、Shaders 1180、Plugins 98285、Source 63014 文件；合计 217608 文件",
+      "bundled dotnet": "Engine/Binaries/ThirdParty/DotNet/8.0.412/win-x64/dotnet.exe 存在（此前猜 8.0.300 是路径写错）",
+      "实机冒烟": "用最小纯内容工程 workbuddy/p3_smoke/ProjectPBZ/ProjectPBZ.uproject 启动 UnrealEditor-Cmd -unattended -NullRHI，日志 LogInit: Build ++UE5+Release-5.7-CL-51494982 / Engine Version 5.7.4-51494982 / Compatible 5.7.0-47537391 / Running engine for game: ProjectPBZ / Android+iOS 等 TargetPlatform 全部加载；exit=0。日志 p3_smoke/editor_smoke.log"
+    },
+    "caveats": [
+      "Templates/ 目录不存在（Launcher 可选模板组件未安装）→ 不能从模板新建工程，但我们按 modding.wiki 手写 .uproject，不受影响；p3_smoke 已验证手写工程可加载",
+      "Engine/Source/Programs/UnrealPak/Private/UnrealPak.cpp 不存在：Launcher 版不含部分程序源码，正常，cook 不需要",
+      "WindowsEngine.ini 全盘未找到：UE5.7 平台配置路径与旧版不同，非缺失",
+      "aqProf.dll / VtuneApi.dll / WinPixGpuCapturer.dll 加载失败(GetLastError=126)：可选性能分析 DLL，官方安装本来就不带，无害",
+      "LogAutomationTest: Error: Condition failed ×2：UE 启动自检在 -NullRHI 下的常见项，非引擎缺失",
+      "LogDirectoryWatcher 找不到 Content/：冒烟工程未建 Content 目录，无害"
+    ],
+    "conclusion": "P3 重建工程 + cook 没有环境障碍。此前只验证过 UnrealPak.exe 存在，现已用真实启动冒烟确认整套编辑器链。"
+  },
+  "p0_8_game_refs": {
+    "status": "COMPLETE",
+    "mounted_files": 310552,
+    "method": "pbzprobe pcls：DefaultFileProvider(EGame.GAME_UE5_7) + PBZ AES key + PBZ usmap v4",
+    "exported": "github_wip/p0_game_refs/ProjectPBZ/Content/PBZContent/DataTable/UI/DT_PBZAppearanceTable.uasset (51288 B, Zen package)",
+    "note": "导出的 Zen 包头部不是 legacy uasset magic，名字表未以明文出现（PBZAppearanceStruct 等字段 count=0）",
+    "mi_selected": [
+      "MI_Wuchang_Head_eedd7a66.uasset (3811 B)",
+      "MI_MI_Body_001_2d15115a.uasset (3309 B)"
+    ],
+    "mi_source": "从 zzzzzz_PBZ_SilkCorsair_2301_P（项目记忆里已确认能正常运行的参照 mod）用 retoc unpack 提取 174 个文件，归档 2 个 MI 到 github_wip/p0_game_refs/",
+    "mi_candidates_in_reference": "ProjectPBZ/Content/Mods/PBZWardrobe/MaterialInstances/ 下有 30+ 个 MI（MI_WC_* / MI_Wuchang_Head / MI_MI_Body_001 / MI_FOX_BraidOrnament 等）",
+    "p1_risk": "UAssetGUI 1.1.0 用 .NET 8 运行时可启动，但 'help' 参数不被识别会直接挂起 GUI（本次已超时清理、无残留进程）。Zen package 的参数编辑能力尚未验证 —— 这是 P1 纯红 MI 测试的真实前置风险，届时需用 UAssetGUI GUI 或 CUE4Parse 挂载完整 Paks 目录（pcls 已证明挂 310552 文件可行）来解决",
+    "remaining": "无（P0.8 的输入已备齐）；Zen 资产编辑能力归入 P1 验证"
+  },
+  "still_todo_p0": [],
+  "user_input_needed": "无。剩余全是本地执行项；只有 P4 需要用户进游戏验证 1~2 次。"
+}
